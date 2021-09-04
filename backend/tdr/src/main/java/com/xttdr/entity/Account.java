@@ -16,4 +16,6 @@ public class Account {
     private String userType;
     @TableField(exist = false)
     private String token;
+    @TableField(exist = false)
+    private User user;
 }
