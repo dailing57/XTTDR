@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xttdr.mapper.CourseMapper">
+    <select id="getCourseById" resultType="com.xttdr.entity.Course">
+        select a.*
+        from `course` a
+        left join `docourse` b on a.course_id = b.course_id
+        where b.student_id = #{id}
+    </select>
+</mapper>

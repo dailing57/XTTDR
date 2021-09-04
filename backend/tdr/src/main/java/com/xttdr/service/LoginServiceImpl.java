@@ -29,6 +29,9 @@ public class LoginServiceImpl implements LoginService{
         if (res == null) {
             return Result.error("-1", "用户名或密码错误");
         }
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("id",account.getId());
+        res.setUser(userMapper.selectOne(userQueryWrapper));
         // 生成token
         String token = TokenUtils.genToken(res);
         res.setToken(token);

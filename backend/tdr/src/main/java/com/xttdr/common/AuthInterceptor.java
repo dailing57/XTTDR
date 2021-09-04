@@ -24,7 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (StrUtil.isBlank(token)) {
             throw new CustomException("401", "未获取到token, 请重新登录");
         }
-        Integer accountId = Integer.valueOf(JWT.decode(token).getAudience().get(0));
+        String accountId = JWT.decode(token).getAudience().get(0);
         Account account = accountMapper.selectById(accountId);
         if (account == null) {
             throw new CustomException("401", "token不合法");
