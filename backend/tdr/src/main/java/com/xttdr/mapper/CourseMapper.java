@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
-    IPage<Course> getCourseById(Page<?> page, @Param("id") String id);
+    IPage<Course> getCourseByAccountId(Page<?> page, @Param("id") String id);
 }

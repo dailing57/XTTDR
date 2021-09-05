@@ -1,21 +1,19 @@
 package com.xttdr.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
-@TableName("course")
+@TableName("course_material")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Course {
-    @TableId("course_id")
+public class CourseMaterial {
+    private String materialId;
     private String courseId;
-    private String name;
+    private String materialPath;
     private String teacherId;
-    private Date createdTime;
+    private Date CreatedTime;
 }
