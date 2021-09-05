@@ -1,9 +1,7 @@
 package com.xttdr.cotroller;
 
-import cn.hutool.json.JSON;
 import com.xttdr.common.Result;
 import com.xttdr.entity.Course;
-import com.xttdr.service.CourseService;
 import com.xttdr.service.CourseServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,35 +11,48 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/course")
-public class CourseController {
+public class CourseController extends BaseController{
     @Resource
     CourseServiceImpl courseService;
 
-    @GetMapping("/{userId}")
-    Result<?> getCoursesByPage(@PathVariable("userId") String id,
-                               @RequestParam(defaultValue = "1") Integer pageNum,
+    @GetMapping
+    public Result<?> getCoursesByPage(@RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "6") Integer pageSize){
-        return courseService.getCoursesByPage(pageNum,pageSize,id);
+        return courseService.getCoursesByPage(pageNum,pageSize, getUser().getId());
     }
 
     @GetMapping("/search/{id}")
-    Result<?> getCourseById(@PathVariable String id){
+    public Result<?> getCourseById(@PathVariable String id){
         return courseService.getCourseByCourseId(id);
     }
 
     @PostMapping("/add")
-    Result<?> addCourse(@RequestBody Course course){
+    public Result<?> addCourse(@RequestBody Course course){
+        if(getUser().getUserType().equals("student")){
+            return Result.error("-1","没有权限");
+        }
         course.setCreatedTime(new Date());
         return courseService.addCourse(course);
     }
-
+    @PostMapping("/update")
+    public Result<?> updateCourse(@RequestBody Course course){
+        if(getUser().getUserType().equals("student")){
+            return Result.error("-1","没有权限");
+        }
+        return courseService.updateCourse(course);
+    }
     @PostMapping("/delete/{courseId}")
-    Result<?> deleteCourse(@PathVariable String courseId){
+    public Result<?> deleteCourse(@PathVariable String courseId){
+        if(getUser().getUserType().equals("student")){
+            return Result.error("-1","没有权限");
+        }
         return courseService.deleteByCourseId(courseId);
     }
-
     @PostMapping("/deleteBatch")
-    Result<?> deleteBatch(@RequestBody List<String> ids){
+    public Result<?> deleteBatch(@RequestBody List<String> ids){
+        if(getUser().getUserType().equals("student")){
+            return Result.error("-1","没有权限");
+        }
         return courseService.deleteBatch(ids);
     }
 }

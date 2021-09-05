@@ -30,8 +30,13 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Result<?> addCourse(Course course) {
-        System.out.println(course);
-        return Result.success(courseMapper.insert(course));
+        courseMapper.insert(course);
+        return Result.success();
+    }
+
+    @Override
+    public Result<?> updateCourse(Course course) {
+        return Result.success(courseMapper.updateById(course));
     }
 
     @Override

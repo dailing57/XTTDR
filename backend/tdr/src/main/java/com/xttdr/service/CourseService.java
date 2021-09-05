@@ -9,6 +9,7 @@ public interface CourseService {
     Result<?> getCoursesByPage(Integer pageNum,Integer pageSize,String search);
     Result<?> getCourseByCourseId(String id);
     Result<?> addCourse(Course course);
+    Result<?> updateCourse(Course course);
     Result<?> deleteByCourseId(String id);
     Result<?> deleteBatch(List<String> ids);
 }

@@ -1,5 +1,6 @@
 package com.xttdr.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseMaterial {
+    @TableId("material_id")
     private String materialId;
     private String courseId;
     private String materialPath;
