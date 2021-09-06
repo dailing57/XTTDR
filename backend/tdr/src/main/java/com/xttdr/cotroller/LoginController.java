@@ -3,9 +3,7 @@ package com.xttdr.cotroller;
 import com.xttdr.common.Result;
 import com.xttdr.entity.Account;
 import com.xttdr.service.LoginServiceImpl;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -22,4 +20,10 @@ public class LoginController {
     public Result<?> register(@RequestBody Account account){
         return loginService.register(account);
     }
+
+    @GetMapping("/account/{id}")
+    public Result<?> getAccountById(@PathVariable String id){
+        return loginService.getAccountById(id);
+    }
+
 }

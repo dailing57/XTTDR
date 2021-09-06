@@ -67,4 +67,23 @@ public class LoginServiceImpl implements LoginService{
         accountMapper.insert(account);
         return Result.success();
     }
+
+    @Override
+    public Result<?> getAccountById(String id) {
+        QueryWrapper<Account> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        Account res = accountMapper.selectOne(queryWrapper);
+        if (res == null) {
+            return Result.error("-1", "用户名或密码错误");
+        }
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("id",id);
+        res.setUser(userMapper.selectOne(userQueryWrapper));
+        // 生成token
+        String token = TokenUtils.genToken(res);
+        res.setToken(token);
+        return Result.success(res);
+    }
+
+
 }

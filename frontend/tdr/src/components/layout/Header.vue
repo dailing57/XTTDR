@@ -1,11 +1,11 @@
 <template>
   <div style="height: 50px; line-height: 50px; border-bottom: 1px solid #ccc; display: flex">
-    <div style="width: 200px; padding-left: 30px; font-weight: bold; color: dodgerblue">后台管理</div>
+    <div style="width: 300px; padding-left: 30px; font-weight: bold; color: dodgerblue">学通天地人在线学习平台</div>
     <div style="flex: 1"></div>
     <div style="width: 100px">
       <el-dropdown>
         <span class="el-dropdown-link">
-          张三<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ user.id }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -26,6 +26,7 @@ export default {
 
   },
   created() {
+
   }
 }
 </script>
