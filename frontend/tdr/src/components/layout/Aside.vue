@@ -1,12 +1,12 @@
 <template>
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
     <el-menu :default-openeds="['1']" style="min-height: 100vh">
-      <div style="text-align: center;margin-top: 20px">
-        <el-avatar :size="50" :src="circleUrl"></el-avatar>
+      <div style="text-align: center;margin-top: 50px">
+        <el-avatar :size="100" :src="circleUrl"></el-avatar>
       </div>
       <el-sub-menu index="1">
         <template #title><i class="el-icon-message"></i>课程管理</template>
-        <el-menu-item index="/course">所有课程</el-menu-item>
+        <el-menu-item>所有课程</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="2">
         <template #title><i class="el-icon-menu"></i>考试管理</template>

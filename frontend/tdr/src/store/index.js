@@ -11,6 +11,7 @@ export default createStore({
   },
   actions: {
     SET_USER({commit}, user) {
+      commit('SET_USER',user)
       this.state.user = user
     }
   },
