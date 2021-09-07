@@ -20,4 +20,10 @@ public class BaseController {
         String aud = JWT.decode(token).getAudience().get(0);
         return accountMapper.selectById(aud);
     }
+
+    public String getAccountId(){
+        String token = request.getHeader("token");
+        String aud = JWT.decode(token).getAudience().get(0);
+        return aud;
+    }
 }

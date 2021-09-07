@@ -7,5 +7,8 @@
         from `course` a
         left join `docourse` b on a.course_id = b.course_id
         where b.student_id = #{id}
+        <if test="search != null">
+            and a.name like "%"#{search}"%"
+        </if>
     </select>
 </mapper>

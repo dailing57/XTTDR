@@ -1,17 +1,50 @@
 <template>
-  <el-card class="box-card">
-    <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
-    <div>{{tableData}}</div>
-  </el-card>
-  <el-pagination style="margin-top: 20px"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[5, 10, 20]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total">
-  </el-pagination>
+  <div class="course-page">
+    <el-row :gutter="20">
+      <el-col :span="12"><el-button type="primary" @click="add">加入课程</el-button></el-col>
+      <el-col :span="12">
+        <div style="margin: 10px 0">
+          <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable></el-input>
+          <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
+        </div>
+      </el-col>
+    </el-row>
+    <div class="course-card">
+      <el-card  class="box-card" v-for="it in tableData">
+        <div class="course-back">
+          <img src="@/assets/img/course.svg" alt=""/>
+        </div>
+        <div class="course-bottom">
+          <span style="position: absolute;left: 0">{{it.name}}</span>
+          <el-button type="primary" class="enter">进入课程</el-button>
+        </div>
+      </el-card>
+    </div>
+    <el-pagination style="margin-top: 50px"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[3, 6, 9]"
+                   :page-size="pageSize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="total">
+    </el-pagination>
+  </div>
+
+  <el-dialog title="加入课程" v-model="dialogVisible" width="30%">
+    <el-form label-width="120px">
+      <el-form-item label="课程编号">
+        <el-input v-model="addStudyId" style="width: 80%"></el-input>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script>
@@ -30,6 +63,7 @@ export default {
       pageSize: 6,
       total: 0,
       tableData: [],
+      addStudyId: '',
       // filesUploadUrl: "http://" + window.server.filesUploadUrl + ":9090/files/upload",
       ids: []
     }
@@ -43,37 +77,16 @@ export default {
         this.user = res.data
       }
     })
-
     this.load()
   },
   methods: {
-    deleteBatch() {
-      if (!this.ids.length) {
-        this.$message.warning("请选择数据！")
-        return
-      }
-      request.post("/book/deleteBatch", this.ids).then(res => {
-        if (res.code === '0') {
-          this.$message.success("批量删除成功")
-          this.load()
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
-    },
-    handleSelectionChange(val) {
-      this.ids = val.map(v => v.id)   // [{id,name}, {id,name}] => [id,id]
-    },
-    filesUploadSuccess(res) {
-      console.log(res)
-      this.form.cover = res.data
-    },
     load() {
       this.loading = true
       request.get("/course", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
+          search: this.search
         }
       }).then(res => {
         this.loading = false
@@ -83,66 +96,17 @@ export default {
     },
     add() {
       this.dialogVisible = true
-      this.form = {}
-      if (this.$refs['upload']) {
-        this.$refs['upload'].clearFiles()  // 清除历史文件列表
-      }
     },
-    save() {
-      if (this.form.id) {  // 更新
-        request.put("/book", this.form).then(res => {
-          console.log(res)
-          if (res.code === '0') {
-            this.$message({
-              type: "success",
-              message: "更新成功"
-            })
-          } else {
-            this.$message({
-              type: "error",
-              message: res.msg
-            })
-          }
-          this.load() // 刷新表格的数据
-          this.dialogVisible = false  // 关闭弹窗
-        })
-      }  else {  // 新增
-        request.post("/book", this.form).then(res => {
-          console.log(res)
-          if (res.code === '0') {
-            this.$message({
-              type: "success",
-              message: "新增成功"
-            })
-          } else {
-            this.$message({
-              type: "error",
-              message: res.msg
-            })
-          }
-
-          this.load() // 刷新表格的数据
-          this.dialogVisible = false  // 关闭弹窗
-        })
-      }
-    },
-    handleEdit(row) {
-      this.form = JSON.parse(JSON.stringify(row))
-      this.dialogVisible = true
-      this.$nextTick(() => {
-        if (this.$refs['upload']) {
-          this.$refs['upload'].clearFiles()  // 清除历史文件列表
+    save(){
+      request.post("/course/addStudy", {params: {
+          addStudyId: this.addStudyId
         }
-      })
-
-    },
-    handleDelete(id) {
-      console.log(id)
-      request.delete("/book/" + id).then(res => {
+      }).then(res => {
+        console.log(res)
         if (res.code === '0') {
           this.$message({
             type: "success",
-            message: "删除成功"
+            message: "新增成功"
           })
         } else {
           this.$message({
@@ -150,7 +114,8 @@ export default {
             message: res.msg
           })
         }
-        this.load()  // 删除之后重新加载表格的数据
+        this.load() // 刷新表格的数据
+        this.dialogVisible = false  // 关闭弹窗
       })
     },
     handleSizeChange(pageSize) {   // 改变当前每页的个数触发
@@ -166,15 +131,32 @@ export default {
 </script>
 
 <style scoped>
-.text {
-  font-size: 14px;
+.course-page{
+  text-align: center;
 }
-
-.item {
-  padding: 18px 0;
+.course-card{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
 }
-
+.course-back{
+  background-color: deepskyblue;
+  margin: 0;
+  width: 100%;
+}
+.course-bottom{
+  position: relative;
+  margin-top: 5px;
+}
 .box-card {
-  width: 480px;
+  width: 400px;
+  height: 200px;
+  margin: 20px;
+}
+.enter{
+  position: absolute;
+  right: 0;
 }
 </style>
