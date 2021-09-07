@@ -18,5 +18,13 @@
         locale: zhCn,
       }
     },
+    created() {
+      if (window.localStorage.getItem("curCourseId") ) {
+        this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(window.localStorage.getItem("curCourseId"))))
+      }
+      window.addEventListener("beforeunload",()=>{
+        window.localStorage.setItem("curCourseId",JSON.stringify(this.$store.state))
+      })
+    }
   }
 </script>

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from "@/layout/Layout";
+import * as path from "path";
 
 const routes = [
   {
@@ -10,8 +11,20 @@ const routes = [
     children: [
       {
         path: '/course',
-        name: '/course',
+        name: 'course',
         component: () => import('@/views/Course')
+      },
+      {
+        path: '/coursePage',
+        name: '/coursePage',
+        component: () => import('@/views/CoursePage'),
+        children: [
+          {
+            path: '/coursePage/material',
+            name: '/coursePage/material',
+            component: ()=>import('@/views/CourseMaterial')
+          }
+        ]
       }
     ]
   },

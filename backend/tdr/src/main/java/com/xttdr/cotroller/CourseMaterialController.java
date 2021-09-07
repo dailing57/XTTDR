@@ -16,8 +16,9 @@ public class CourseMaterialController extends BaseController{
     CourseMaterialServiceImpl courseMaterialService;
     @GetMapping("/{courseId}")
     public Result<?> getCourseMaterialByPage(@RequestParam(defaultValue = "1") Integer pageNum,
-                                             @RequestParam(defaultValue = "6") Integer pageSize,
+                                             @RequestParam(defaultValue = "10") Integer pageSize,
                                              @PathVariable String courseId){
+        System.out.println(courseId);
         return courseMaterialService.getCourseMaterialByPage(pageNum,pageSize,courseId);
     }
     @GetMapping("/search/{courseMaterialId}")

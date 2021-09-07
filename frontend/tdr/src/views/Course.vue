@@ -1,6 +1,6 @@
 <template>
   <div class="course-page">
-    <el-row :gutter="20">
+    <el-row :gutter="0">
       <el-col :span="12"><el-button type="primary" @click="add">加入课程</el-button></el-col>
       <el-col :span="12">
         <div style="margin: 10px 0">
@@ -9,14 +9,14 @@
         </div>
       </el-col>
     </el-row>
-    <div class="course-card">
+    <div class="course-card" v-loading="loading">
       <el-card  class="box-card" v-for="it in tableData">
         <div class="course-back">
           <img src="@/assets/img/course.svg" alt=""/>
         </div>
         <div class="course-bottom">
           <span style="position: absolute;left: 0">{{it.name}}</span>
-          <el-button type="primary" class="enter">进入课程</el-button>
+          <el-button type="primary" class="enter" @click="enterCourse(it.courseId)">进入课程</el-button>
         </div>
       </el-card>
     </div>
@@ -118,6 +118,10 @@ export default {
         this.dialogVisible = false  // 关闭弹窗
       })
     },
+    enterCourse(courseId){
+      this.$store.commit('setCourseId',courseId)
+      this.$router.push('/coursePage')
+    },
     handleSizeChange(pageSize) {   // 改变当前每页的个数触发
       this.pageSize = pageSize
       this.load()
@@ -139,7 +143,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .course-back{
   background-color: deepskyblue;
