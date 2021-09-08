@@ -1,10 +1,13 @@
 <template>
-  <div style="width: 100%; height: 100vh; overflow: hidden"> <!--  :style="bg" 加背景图片-->
-    <div style="width: 400px; margin: 100px auto">
-      <div style="font-size: 30px; text-align: center; padding: 30px 0">欢迎登录</div>
-      <el-form ref="form" :model="form" size="normal" :rules="rules">
-        <el-form-item prop="id">
-          <el-input prefix-icon="el-icon-user-solid" v-model="form.id" placeholder="请输入账号"></el-input>
+  <div class="login" style="width: 100%; height: 100vh; overflow-x: hidden; " :style="bg" > <!--  加背景图片-->
+    <div style="width:30vw;height: 70vh; margin:9vh auto 9vh auto; ">
+      <div style="font-size: 30px; text-align: center; ">
+        <img :src="titleUrl" style="width:90%;height: 90%;margin-right: 10%" />
+<!--        <p>欢迎登录</p>-->
+      </div>
+      <el-form ref="form" :model="form" size="normal" :rules="rules" >
+        <el-form-item prop="id" >
+          <el-input  prefix-icon="el-icon-user-solid" v-model="form.id" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item prop="pwd">
           <el-input prefix-icon="el-icon-lock" v-model="form.pwd" show-password placeholder="请输入密码"></el-input>
@@ -15,8 +18,11 @@
            <ValidCode @input="createValidCode" />
          </div>
         </el-form-item>
+
+
+
         <div style="text-align: center;margin-bottom: 20px">
-          <el-radio-group v-model="form.userType">
+          <el-radio-group v-model="form.userType" fill="#7858C0">
             <el-radio-button label="student">学生</el-radio-button>
             <el-radio-button label="teacher">教师</el-radio-button>
             <el-radio-button label="admin">管理员</el-radio-button>
@@ -29,6 +35,10 @@
         </el-form-item>
         <el-form-item><el-button type="text" @click="$router.push('/register')">前往注册 >> </el-button></el-form-item>
       </el-form>
+
+    </div>
+    <div class="footer">
+      <p>Copyright© 2021.&nbsp;&nbsp;&nbsp; 学通天地人.&nbsp;&nbsp;All rights reserved.</p>
     </div>
   </div>
 </template>
@@ -40,7 +50,7 @@ import ValidCode from "@/components/ValidCode";
 export default {
   name: "Login",
   components: {
-    ValidCode
+    ValidCode,
   },
   data() {
     return {
@@ -53,13 +63,14 @@ export default {
           {required: true, message: '请输入密码', trigger: 'blur'},
         ],
       },
-      validCode: ''
+      validCode: '',
       // 加背景图片
-      // bg: {
-      //   backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
-      //   backgroundRepeat: "no-repeat",
-      //   backgroundSize: "100% 100%"
-      // }
+      bg: {
+        backgroundImage: "url(" + require("../assets/bg.jpg") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%"
+      },
+      titleUrl: require("../assets/title.png"),
     }
   },
   created() {
@@ -71,6 +82,7 @@ export default {
       this.validCode = data
     },
     login() {
+      console.log("login now")
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (!this.form.validCode) {
@@ -81,8 +93,10 @@ export default {
             this.$message.error("验证码错误")
             return
           }
+          console.log("to request")
           request.post("/login", this.form).then(res => {
             if (res.code === '0') {
+              console.log("code")
               this.$message({
                 type: "success",
                 message: "登录成功"
@@ -99,10 +113,16 @@ export default {
         }
       })
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
+@import '../assets/css/style.css';
+div >>> .el-input > input{
+  height: 50px;
+  font-family: "ok";
+  font-size: 25px;
+}
 
 </style>

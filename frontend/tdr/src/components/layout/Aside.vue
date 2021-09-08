@@ -1,6 +1,6 @@
 <template>
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu :default-openeds="['1']" style="min-height: 100vh">
+  <el-aside width="200px" style="background-color: rgb(238, 241, 246); margin-top: 10px">
+    <el-menu :default-openeds="['1']" style="min-height: 100vh;  ">
       <div style="text-align: center;margin-top: 50px">
         <el-avatar :size="100" :src="circleUrl"></el-avatar>
       </div>
@@ -37,6 +37,7 @@
           <template #title>选项4</template>
           <el-menu-item index="3-4-1">选项4-1</el-menu-item>
         </el-sub-menu>
+
       </el-sub-menu>
     </el-menu>
   </el-aside>
@@ -48,15 +49,62 @@ export default {
   name: "Aside",
   data() {
     return {
-
+      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      imageUrl: '',
     }
-  }
+  },
+      methods: {
+        handleAvatarSuccess(res, file) {
+          this.imageUrl = URL.createObjectURL(file.raw)
+        },
+        beforeAvatarUpload(file) {
+          const isJPG = file.type === 'image/jpeg'
+          const isLt2M = file.size / 1024 / 1024 < 2
+
+          if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG 格式!')
+          }
+          if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!')
+          }
+          return isJPG && isLt2M
+        },
+      },
 }
 </script>
+
 
 <style scoped>
 
   .el-aside {
     color: var(--el-text-color-primary);
   }
+  /*用户上传头像的测试*/
+      .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        align: center;
+        background: #409eff;
+      }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+
 </style>

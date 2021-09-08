@@ -1,0 +1,29 @@
+@font-face {
+	font-family: 'ok';
+	src: url("FZFWZhuZGDSMCJW.TTF");
+	}
+*{
+    margin: 0;
+    padding: 0;
+    /*background-color: rgb(189, 205, 235);*/
+}
+li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+.login .footer {
+    padding: 24px 15px;
+    margin: 10vh auto 0 auto;
+    font-size: 20px;
+    color: #8c939d;
+    /*width: 1000px;*/
+    background-color: rgba(255, 255, 255, 0.41);
+    text-align: center;
+}
+.login .input{
+    height: 35px;
+    background: #ffd04b;
+    margin: 10px auto;
+}
