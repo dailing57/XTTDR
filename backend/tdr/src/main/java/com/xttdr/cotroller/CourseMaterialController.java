@@ -3,11 +3,17 @@ package com.xttdr.cotroller;
 import com.xttdr.common.Result;
 import com.xttdr.entity.CourseMaterial;
 import com.xttdr.service.CourseMaterialServiceImpl;
+import com.xttdr.utils.FileUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/courseMaterial")
@@ -26,13 +32,26 @@ public class CourseMaterialController extends BaseController{
         return courseMaterialService.getCourseMaterialById(courseMaterialId);
     }
     @PostMapping("/add")
-    public Result<?> addCourseMaterial(@RequestBody CourseMaterial courseMaterial){
+    public Result<?> addCourseMaterial(HttpServletRequest request) throws IOException {
+        MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         if(getUser().getUserType().equals("student")){
             return Result.error("-1","没有权限");
         }
-        courseMaterial.setCreatedTime(new Date());
-        courseMaterial.setTeacherId(getUser().getId());
-        return courseMaterialService.addCourseMaterial(courseMaterial);
+        String courseId = params.getParameter("courseId");
+        System.out.println(courseId);
+        CourseMaterial courseMaterial = new CourseMaterial();
+        FileUtils fileUtils = new FileUtils();
+        for (MultipartFile file : files) {
+            courseMaterial.setMaterialId((new Date()).toString());
+            courseMaterial.setCourseId(courseId);
+            courseMaterial.setMaterialPath(fileUtils.upload(file));
+            courseMaterial.setName(file.getOriginalFilename());
+            courseMaterial.setCreatedTime(new Date());
+            courseMaterial.setTeacherId(getUser().getId());
+            courseMaterialService.addCourseMaterial(courseMaterial);
+        }
+        return Result.success();
     }
     @PostMapping("/update")
     public Result<?> updateCourseMaterial(@RequestBody CourseMaterial courseMaterial){
@@ -55,4 +74,5 @@ public class CourseMaterialController extends BaseController{
         }
         return courseMaterialService.deleteBatch(ids);
     }
+
 }

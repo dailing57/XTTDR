@@ -17,5 +17,6 @@ public class CourseMaterial {
     private String courseId;
     private String materialPath;
     private String teacherId;
+    private String name;
     private Date CreatedTime;
 }

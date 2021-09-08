@@ -29,7 +29,7 @@ public class FileUtils {
         String flag = IdUtil.fastSimpleUUID();// 定义文件的唯一标识（前缀）
         String rootFilePath = System.getProperty("user.dir") + "/files/" + flag + "_" + originalFilename;  // 获取上传的路径
         cn.hutool.core.io.FileUtil.writeBytes(file.getBytes(), rootFilePath);  // 把文件写入到上传的路径
-        return "http://" + ip + ":" + port + "/files/" + flag;  // 返回结果 url
+        return rootFilePath;  // 返回结果 url
     }
 
     public void getFile(String flag, HttpServletResponse response) {

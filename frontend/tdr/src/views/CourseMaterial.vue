@@ -2,9 +2,11 @@
   <el-upload
       class="upload-demo"
       ref="upload"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      multiple
+      action=""
       :on-preview="handlePreview"
       :on-remove="handleRemove"
+      :http-request="httpRequest"
       :file-list="fileList"
       :auto-upload="false"
   >
@@ -16,16 +18,15 @@
         size="small"
         type="success"
         @click="submitUpload"
-    >上传文件</el-button
-    >
+    >上传文件
+    </el-button>
   </el-upload>
 
-  <el-table :data="tableData" border stripe style="width: 100%;margin-top: 10px">
+  <el-table :data="tableData"  stripe style="width: 100%;margin-top: 10px;">
+    <el-table-column prop="name" label="文件名" width="360"> </el-table-column>
     <el-table-column prop="createdTime" label="日期" width="360"> </el-table-column>
-    <el-table-column prop="materialId" label="编号" width="360"> </el-table-column>
     <el-table-column prop="teacherId" label="上传者"> </el-table-column>
     <el-table-column label="操作"> </el-table-column>
-
   </el-table>
   <div style="text-align: center">
     <el-pagination
@@ -49,6 +50,7 @@ export default {
   data() {
     return {
       fileList: [],
+      uploadFileList: [],
       user: {},
       loading: true,
       form: {},
@@ -58,7 +60,7 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      //filesUploadUrl: "http://" + window.server.filesUploadUrl + ":9090/files/upload",
+      filesUploadUrl: "http://localhost:9090/courseMaterial/add",
       ids: []
     }
   },
@@ -72,11 +74,39 @@ export default {
     }
   },
   methods: {
+    httpRequest(param) {
+      console.log(param)
+      let fileObj = param.file // 相当于input里取得的files
+      let fd = new FormData()// FormData 对象
+      fd.append('file', fileObj)// 文件对象
+      fd.append('courseId', this.courseId)
+      let url = this.filesUploadUrl
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      request.post(url, fd, config).then(res=>{
+        if (res.code === '0') {
+          this.$message({
+            type: "success",
+            message: "新增成功"
+          })
+          this.fileList=[]
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.load() // 刷新表格的数据
+      })
+    },
     submitUpload() {
       this.$refs.upload.submit()
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      this.fileList=fileList
     },
     handlePreview(file) {
       console.log(file)

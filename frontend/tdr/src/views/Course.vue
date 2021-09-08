@@ -102,7 +102,6 @@ export default {
           addStudyId: this.addStudyId
         }
       }).then(res => {
-        console.log(res)
         if (res.code === '0') {
           this.$message({
             type: "success",
