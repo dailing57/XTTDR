@@ -1,12 +1,15 @@
 <template>
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246); margin-top: 10px">
-    <el-menu :default-openeds="['1']" style="min-height: 100vh;  ">
+  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+    <el-menu :default-openeds="['1']" style="min-height: 100vh"
+             :default-active="path"
+    >
+             router
       <div style="text-align: center;margin-top: 50px">
         <el-avatar :size="100" :src="circleUrl"></el-avatar>
       </div>
       <el-sub-menu index="1">
         <template #title><i class="el-icon-message"></i>课程管理</template>
-        <el-menu-item>所有课程</el-menu-item>
+        <el-menu-item index="/course">所有课程</el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="2">
         <template #title><i class="el-icon-menu"></i>考试管理</template>
@@ -49,27 +52,11 @@ export default {
   name: "Aside",
   data() {
     return {
+      user: {},
+      path: this.$route.path,   // 设置默认高亮的菜单
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-      imageUrl: '',
     }
-  },
-      methods: {
-        handleAvatarSuccess(res, file) {
-          this.imageUrl = URL.createObjectURL(file.raw)
-        },
-        beforeAvatarUpload(file) {
-          const isJPG = file.type === 'image/jpeg'
-          const isLt2M = file.size / 1024 / 1024 < 2
-
-          if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!')
-          }
-          if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!')
-          }
-          return isJPG && isLt2M
-        },
-      },
+  }
 }
 </script>
 

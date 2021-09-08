@@ -10,7 +10,7 @@
 
 
         <el-main>
-          <router-view style="flex: 1" @userInfo="refreshUser"/>
+          <router-view style="flex: 1"/>
         </el-main>
 
         <el-footer>   <Footer/></el-footer>
