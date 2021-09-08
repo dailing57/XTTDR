@@ -26,7 +26,11 @@
     <el-table-column prop="name" label="文件名" width="360"> </el-table-column>
     <el-table-column prop="createdTime" label="日期" width="360"> </el-table-column>
     <el-table-column prop="teacherId" label="上传者"> </el-table-column>
-    <el-table-column label="操作"> </el-table-column>
+    <el-table-column label="操作">
+      <template #default="scope">
+        <el-button size="mini" @click="handleDownload(scope.row.courseId,scope.row.name)">下载</el-button>
+      </template>
+    </el-table-column>
   </el-table>
   <div style="text-align: center">
     <el-pagination
@@ -44,6 +48,7 @@
 
 <script>
 import request from "@/utils/request";
+import fileDownload from "js-file-download";
 
 export default {
   name: "CourseMaterial",
@@ -110,6 +115,15 @@ export default {
     },
     handlePreview(file) {
       console.log(file)
+    },
+    handleDownload(path,fileName){
+      request.get('/files/download/'+path+fileName, {responseType: 'blob'}).then(res => {
+        console.log(res)
+        fileDownload(res.data, fileName);
+      }).catch((res)=>{
+        console.log('文件下载失败');
+        }
+      )
     },
     load() {
       this.loading = true

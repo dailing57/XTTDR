@@ -4,12 +4,14 @@ import com.xttdr.common.Result;
 import com.xttdr.entity.CourseMaterial;
 import com.xttdr.service.CourseMaterialServiceImpl;
 import com.xttdr.utils.FileUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -43,9 +45,9 @@ public class CourseMaterialController extends BaseController{
         CourseMaterial courseMaterial = new CourseMaterial();
         FileUtils fileUtils = new FileUtils();
         for (MultipartFile file : files) {
-            courseMaterial.setMaterialId((new Date()).toString());
+            courseMaterial.setMaterialId(courseId+file.getOriginalFilename());
             courseMaterial.setCourseId(courseId);
-            courseMaterial.setMaterialPath(fileUtils.upload(file));
+            courseMaterial.setMaterialPath(fileUtils.upload(file,courseId));
             courseMaterial.setName(file.getOriginalFilename());
             courseMaterial.setCreatedTime(new Date());
             courseMaterial.setTeacherId(getUser().getId());
@@ -53,6 +55,7 @@ public class CourseMaterialController extends BaseController{
         }
         return Result.success();
     }
+
     @PostMapping("/update")
     public Result<?> updateCourseMaterial(@RequestBody CourseMaterial courseMaterial){
         if(getUser().getUserType().equals("student")){
