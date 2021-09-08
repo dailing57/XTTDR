@@ -21,7 +21,6 @@ public class FileController {
 
     @GetMapping("/download/{path}")
     public ResponseEntity<InputStreamResource> downloadFiles(@PathVariable String path, HttpServletResponse response) throws IOException {
-        //fileUtils.getFile(path,response);
         return fileUtils.downloadFile(path);
     }
 
