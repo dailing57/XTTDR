@@ -1,5 +1,6 @@
 <template>
   <el-upload
+      v-if="user.role !== 'student'"
       class="upload-demo"
       ref="upload"
       multiple
@@ -29,6 +30,11 @@
     <el-table-column label="操作">
       <template #default="scope">
         <el-button size="mini" @click="handleDownload(scope.row.courseId,scope.row.name)">下载</el-button>
+        <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.materialId)" v-if="user.role !== 'student'">
+          <template #reference>
+            <el-button size="mini" type="danger">删除</el-button>
+          </template>
+        </el-popconfirm>
       </template>
     </el-table-column>
   </el-table>
@@ -121,6 +127,22 @@ export default {
         fileDownload(res, fileName);
       }).catch((res)=>{
         console.log('download error');
+        }
+      )
+    },
+    handleDelete(id){
+      request.post('/courseMaterial/delete/'+id).then(res => {
+          if(res.code === '0'){
+            this.$message({
+              type: "success",
+              message: "删除成功"})
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+        this.load() // 刷新表格的数据
         }
       )
     },
