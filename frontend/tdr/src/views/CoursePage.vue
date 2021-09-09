@@ -1,12 +1,17 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="课程" name="course">课程</el-tab-pane>
-    <el-tab-pane label="讨论" name="discuss">讨论</el-tab-pane>
-    <el-tab-pane label="作业" name="homework">作业</el-tab-pane>
-    <el-tab-pane label="资料" name="material">
-      <router-view></router-view>
-    </el-tab-pane>
-  </el-tabs>
+    <el-menu
+        :default-active="path"
+        class="el-menu-demo"
+        mode="horizontal"
+        router
+        style="margin-bottom: 10px"
+    >
+      <el-menu-item index="/coursePage/video">课程</el-menu-item>
+      <el-menu-item index="/coursePage/discuss">讨论</el-menu-item>
+      <el-menu-item index="/coursePage/homework">作业</el-menu-item>
+      <el-menu-item index="/coursePage/material">资料</el-menu-item>
+    </el-menu>
+    <router-view></router-view>
 </template>
 
 <script>
@@ -15,13 +20,13 @@ export default {
   name: "CoursePage",
   data() {
       return {
-        activeName: 'course',
+        path: this.$route.path
       }
   },
+  created() {
+  },
   methods: {
-    handleClick(tab, event) {
-      this.$router.push('/coursePage/'+this.activeName)
-    },
+
   }
 }
 </script>

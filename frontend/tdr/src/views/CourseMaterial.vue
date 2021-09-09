@@ -1,6 +1,6 @@
 <template>
   <el-upload
-      v-if="user.role !== 'student'"
+      v-if="user.userType !== 'student'"
       class="upload-demo"
       ref="upload"
       multiple
@@ -23,14 +23,14 @@
     </el-button>
   </el-upload>
 
-  <el-table :data="tableData"  stripe style="width: 100%;margin-top: 10px;">
+  <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
     <el-table-column prop="name" label="文件名" width="360"> </el-table-column>
     <el-table-column prop="createdTime" label="日期" width="360"> </el-table-column>
     <el-table-column prop="teacherId" label="上传者"> </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
         <el-button size="mini" @click="handleDownload(scope.row.courseId,scope.row.name)">下载</el-button>
-        <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.materialId)" v-if="user.role !== 'student'">
+        <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.materialId)" v-if="user.userType !== 'student'">
           <template #reference>
             <el-button size="mini" type="danger">删除</el-button>
           </template>

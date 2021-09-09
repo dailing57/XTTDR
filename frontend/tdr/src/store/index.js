@@ -6,7 +6,7 @@ export default createStore({
     curCourseId: ''
   },
   mutations: {
-    SET_USER(state, user) {
+    setUser(state, user) {
       state.user = user
     },
     setCourseId(state,courseId){
