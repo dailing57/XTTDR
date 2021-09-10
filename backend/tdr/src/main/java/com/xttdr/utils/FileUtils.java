@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 public class FileUtils {
@@ -36,6 +37,8 @@ public class FileUtils {
     }
 
     public void getFile(String path, HttpServletResponse response) {
+        path = System.getProperty("user.dir") + "/files/" + path;
+        System.out.println(path);
         File file = new File(path);
         if(!file.exists()){
             System.out.println("not exists");
@@ -61,18 +64,21 @@ public class FileUtils {
     }
 
     public Boolean deleteFile(String path){
+        path = System.getProperty("user.dir") + "/files/" + path;
+        System.out.println(path);
         return FileSystemUtils.deleteRecursively(new File(path));
     }
 
     public ResponseEntity<InputStreamResource> downloadFile(String path)
             throws IOException {
-
+        String filePath = System.getProperty("user.dir") + "/files/" + path;
         FileSystemResource file = new FileSystemResource(filePath);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFilename()));
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
+
         return ResponseEntity
                 .ok()
                 .headers(headers)
