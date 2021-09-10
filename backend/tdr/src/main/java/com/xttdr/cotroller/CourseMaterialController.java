@@ -68,6 +68,8 @@ public class CourseMaterialController extends BaseController{
         if(getUser().getUserType().equals("student")){
             return Result.error("-1","没有权限");
         }
+        FileUtils fileUtils = new FileUtils();
+        fileUtils.deleteFile(courseMaterialId);
         return courseMaterialService.deleteCourseMaterialById(courseMaterialId);
     }
     @PostMapping("/deleteBatch")

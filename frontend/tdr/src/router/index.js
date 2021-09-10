@@ -18,11 +18,27 @@ const routes = [
         path: '/coursePage',
         name: '/coursePage',
         component: () => import('@/views/CoursePage'),
+        redirect: "/coursePage/video",
         children: [
           {
             path: '/coursePage/material',
             name: '/coursePage/material',
             component: ()=>import('@/views/CourseMaterial')
+          },
+          {
+            path: '/coursePage/homework',
+            name: '/coursePage/homework',
+            component: () => import('@/views/CourseHomework')
+          },
+          {
+            path: '/coursePage/video',
+            name: '/coursePage/video',
+            component: () => import('@/views/CourseVideo')
+          },
+          {
+            path: '/coursePage/discuss',
+            name: '/coursePage/discuss',
+            component: () => import('@/views/CourseDiscuss')
           }
         ]
       }
