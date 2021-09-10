@@ -31,11 +31,8 @@ public class FileController {
 
     @GetMapping("/download/{path}")
     public ResponseEntity<InputStreamResource> downloadFiles(@PathVariable String path, HttpServletResponse response) throws IOException {
-        fileUtils.getFile(path,response);
 
-        ResponseEntity<InputStreamResource> tmp =fileUtils.downloadFile(path);
-//        System.out.println(tmp);
-        return tmp;
+        return fileUtils.downloadFile(path);
     }
 
     @PostMapping("/delete/{path}")

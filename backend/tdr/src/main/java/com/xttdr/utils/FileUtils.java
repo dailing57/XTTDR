@@ -36,8 +36,6 @@ public class FileUtils {
     }
 
     public void getFile(String path, HttpServletResponse response) {
-        path = System.getProperty("user.dir") + "\\files\\" + path;
-        System.out.println("path:"+path);
         File file = new File(path);
         if(!file.exists()){
             System.out.println("not exists");
@@ -68,17 +66,13 @@ public class FileUtils {
 
     public ResponseEntity<InputStreamResource> downloadFile(String path)
             throws IOException {
-        String filePath = System.getProperty("user.dir") + "\\files\\" + path;
-        System.out.println( filePath );
+
         FileSystemResource file = new FileSystemResource(filePath);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFilename()));
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
-//    System.out.println(headers);
-//        System.out.println(file);
-//        System.out.println(file.getInputStream());
         return ResponseEntity
                 .ok()
                 .headers(headers)
