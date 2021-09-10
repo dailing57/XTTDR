@@ -88,6 +88,7 @@ export default {
   },
   created() {
     let userStr = sessionStorage.getItem("user")
+    this.user = JSON.parse(userStr)
     this.load()
   },
   computed: {

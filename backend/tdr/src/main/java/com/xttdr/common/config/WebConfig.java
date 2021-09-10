@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/files/**").addResourceLocations("classpath:/files/");
+        registry.addResourceHandler("/files/**").addResourceLocations("file:"+System.getProperty("user.dir")+"/files/");
     }
     @Bean
     public AuthInterceptor authInterceptor() {

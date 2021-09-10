@@ -35,13 +35,8 @@ export default {
   methods: {
     refreshUser() {
       let userJson = sessionStorage.getItem("user");
-      if (!userJson) {
-        return
-      }
+      this.user = JSON.parse(userJson)
       let userId = JSON.parse(userJson).id
-      request.get("/account/" + userId).then(res => {
-        this.user = res.data
-      })
     }
   }
 }
