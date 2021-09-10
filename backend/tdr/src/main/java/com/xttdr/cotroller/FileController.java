@@ -42,7 +42,7 @@ public class FileController {
         String flag = IdUtil.fastSimpleUUID();
         String rootFilePath = System.getProperty("user.dir") + "/files/" + flag + "_" + originalFilename;  // 获取上传的路径
         FileUtil.writeBytes(file.getBytes(), rootFilePath);  // 把文件写入到上传的路径
-        String url = ip + ":" + port +  "/files/"  + flag + "_" + originalFilename;
+        String url = "http://" + ip + ":" + port +  "/files/"  + flag + "_" + originalFilename;
         JSONObject json = new JSONObject();
         json.set("errno", 0);
         JSONArray arr = new JSONArray();
