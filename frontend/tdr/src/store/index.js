@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     user: {},
-    curCourseId: ''
+    curCourseId: '',
+    curHomeworkId: ''
   },
   mutations: {
     setUser(state, user) {
@@ -11,6 +12,9 @@ export default createStore({
     },
     setCourseId(state,courseId){
       state.curCourseId=courseId
+    },
+    setHomeworkId(state,homeworkId){
+      state.curHomeworkId = homeworkId
     }
   },
   actions: {

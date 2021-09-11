@@ -41,7 +41,6 @@ public class CourseMaterialController extends BaseController{
             return Result.error("-1","没有权限");
         }
         String courseId = params.getParameter("courseId");
-        System.out.println(courseId);
         CourseMaterial courseMaterial = new CourseMaterial();
         FileUtils fileUtils = new FileUtils();
         for (MultipartFile file : files) {

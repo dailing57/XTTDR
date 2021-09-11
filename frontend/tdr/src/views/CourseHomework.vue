@@ -7,8 +7,9 @@
     <el-table-column prop="deadline" label="结束日期"> </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
-        <el-button size="mini" type="primary" @click="details(scope.row)">查看</el-button>
+        <el-button size="mini" type="success" @click="details(scope.row)">查看</el-button>
         <el-button size="mini" v-if="user.userType !== 'student'" @click="handleEdit(scope.row)">编辑</el-button>
+        <el-button size="mini" @click="homeworkList(scope.row.homeworkId)">批阅</el-button>
         <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.homeworkId)" v-if="user.userType !== 'student'">
           <template #reference>
             <el-button size="mini" type="danger">删除</el-button>
@@ -51,7 +52,31 @@
   </el-dialog>
 
   <el-dialog title="详情" v-model="vis" width="50%">
-    <el-card>
+    <el-upload
+        v-if="user.userType !== 'student'"
+        class="upload-demo"
+        ref="upload"
+        multiple
+        action=""
+        :limit="1"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :http-request="httpRequest"
+        :file-list="fileList"
+        :auto-upload="false"
+    >
+      <template #trigger>
+        <el-button size="small" type="primary">选取文件</el-button>
+      </template>
+      <el-button
+          style="margin-left: 10px;"
+          size="small"
+          type="success"
+          @click="submitUpload"
+      >提交上传
+      </el-button>
+    </el-upload>
+    <el-card style="margin-top: 10px">
       <div v-html="detail.content" style="min-height: 100px"></div>
     </el-card>
   </el-dialog>
@@ -62,9 +87,9 @@
 import request from "@/utils/request";
 import fileDownload from "js-file-download";
 import E from 'wangeditor'
+import {h} from "vue";
 
 let editor
-
 export default {
   name: "CourseHomework",
   data() {
@@ -80,7 +105,7 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      filesUploadUrl: "http://localhost:9090/files/upload",
+      filesUploadUrl: "http://localhost:9090/homework/submit",
       ids: [],
       vis: false,
       detail: {}
@@ -97,6 +122,15 @@ export default {
     }
   },
   methods: {
+    homeworkList(homeworkId){
+      this.$store.commit('setHomeworkId',homeworkId)
+      this.$router.push({
+        name: 'homeworkList',
+        params: {
+          homeworkId: homeworkId
+        }
+      })
+    },
     details(row) {
       this.detail = row
       this.vis = true
@@ -106,7 +140,8 @@ export default {
       let fileObj = param.file // 相当于input里取得的files
       let fd = new FormData()// FormData 对象
       fd.append('file', fileObj)// 文件对象
-      fd.append('courseId', this.courseId)
+      fd.append('homeworkId', this.detail.homeworkId)
+      fd.append('studentId',this.user.id)
       let url = this.filesUploadUrl
       let config = {
         headers: {
@@ -117,7 +152,7 @@ export default {
         if (res.code === '0') {
           this.$message({
             type: "success",
-            message: "新增成功"
+            message: "提交成功"
           })
           this.fileList=[]
         } else {
@@ -126,7 +161,6 @@ export default {
             message: res.msg
           })
         }
-        this.load() // 刷新表格的数据
       })
     },
     submitUpload() {
@@ -137,14 +171,6 @@ export default {
     },
     handlePreview(file) {
       console.log(file)
-    },
-    handleDownload(path,fileName){
-      request.get('/files/download/'+path+fileName, {responseType: 'blob'}).then(res => {
-        fileDownload(res, fileName);
-      }).catch((res)=>{
-            console.log('download error');
-          }
-      )
     },
     handleadd(){
       this.dialogVisible = true
@@ -185,7 +211,6 @@ export default {
         this.form.teacherId = user.id
         this.form.courseId = this.courseId
         request.post("/homework/add", this.form).then(res => {
-          console.log(res)
           if (res.code === '0') {
             this.$message({
               type: "success",

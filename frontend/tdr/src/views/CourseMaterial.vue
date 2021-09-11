@@ -125,9 +125,9 @@ export default {
     },
     handleDownload(path,fileName){
       request.get('/files/download/'+path+fileName, {responseType: 'blob'}).then(res => {
-        fileDownload(res, fileName);
+        fileDownload(res, fileName)
       }).catch((res)=>{
-        console.log('download error');
+        console.log('download error')
         }
       )
     },
