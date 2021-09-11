@@ -11,10 +11,11 @@
         </el-popconfirm>
       </template>
     </el-table-column>
+
     <el-table-column prop="createdTime" label="评分" width="360">
       <template #default="scope">
-        <el-rate v-model="rate" allow-half style="display: inline"/>
-        <el-button size="mini" type="success" @click="submitPoints(scope.row.id)">提交</el-button>
+        <el-rate v-model="scope.row.score" allow-half style="display: inline"/>
+        <el-button size="mini" type="success" @click="submitPoints(scope.row.id,scope.row.score)">提交</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -40,6 +41,7 @@ export default {
   name: "HomeworkList",
   data() {
     return {
+      curScore: 0,
       loading: true,
       rate: null,
       currentPage: 1,
@@ -79,12 +81,12 @@ export default {
         this.load()
       })
     },
-    submitPoints(id){
+    submitPoints(id,score){
       request.post('/homework/submitPoints',null,{
         params:{
           homeworkId: this.homeworkId,
           id: id,
-          score: this.rate
+          score: score
         }
       }).then( res => {
           if (res.code === '0') {

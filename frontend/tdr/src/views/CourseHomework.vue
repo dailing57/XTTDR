@@ -9,7 +9,7 @@
       <template #default="scope">
         <el-button size="mini" type="success" @click="details(scope.row)">查看</el-button>
         <el-button size="mini" v-if="user.userType !== 'student'" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button size="mini" @click="homeworkList(scope.row.homeworkId)">批阅</el-button>
+        <el-button size="mini" v-if="user.userType !== 'student'" @click="homeworkList(scope.row.homeworkId)">批阅</el-button>
         <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.homeworkId)" v-if="user.userType !== 'student'">
           <template #reference>
             <el-button size="mini" type="danger">删除</el-button>
@@ -53,7 +53,6 @@
 
   <el-dialog title="详情" v-model="vis" width="50%">
     <el-upload
-        v-if="user.userType !== 'student'"
         class="upload-demo"
         ref="upload"
         multiple

@@ -38,7 +38,12 @@ public class HomeworkServiceImpl implements HomeworkService{
     public Result<?> submitHomework(String homeworkId, String studentId, List<MultipartFile> files) throws IOException {
         Homework homework = homeworkMapper.selectById(homeworkId);
         if(homework.getDeadline().before(new Date())){
-            Result.error("-1","作业已截止");
+            return Result.error("-1","作业已截止");
+        }
+        QueryWrapper<DoHomework> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("homework_id",homeworkId).eq("id",studentId);
+        if(doHomeworkMapper.selectOne(queryWrapper) != null){
+            return Result.error("-1","你已提交本次作业");
         }
         DoHomework doHomework = new DoHomework();
         doHomework.setHomeworkId(homeworkId);
