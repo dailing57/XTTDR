@@ -13,5 +13,6 @@ public class User {
     private String id;
     private String workId;
     private String name;
-    private String SchoolId;
+    private String schoolId;
+    private String avatar;
 }

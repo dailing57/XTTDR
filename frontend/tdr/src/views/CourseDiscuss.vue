@@ -10,7 +10,7 @@
 
       <div style="display: flex; padding: 20px" v-for="item in comments">
         <div style="text-align: center; flex: 1">
-<!--          <el-image :src="item.avatar" style="width: 60px; height: 60px; border-radius: 50%"></el-image>-->
+          <el-image :src="item.avatar" style="width: 60px; height: 60px; border-radius: 50%"></el-image>
         </div>
         <div style="padding: 0 10px; flex: 5">
           <div><b style="font-size: 14px">{{ item.id }}</b></div>
@@ -21,7 +21,7 @@
           <div style="background-color: #eee; padding: 10px" v-if="item.parentComment">{{ item.id }}：{{ item.parentComment.content }}</div>
           <div style="color: #888; font-size: 12px">
             <span>{{ item.createdTime  }}</span>
-            <el-button type="text" style="margin-left: 20px" @click="reReply(item.id)">回复</el-button>
+            <el-button type="text" style="margin-left: 20px" @click="reReply(item.commentId)">回复</el-button>
           </div>
         </div>
       </div>
@@ -89,7 +89,6 @@ export default {
           pageSize: this.pageSize,
           courseId: this.courseId
         }}).then(res => {
-        console.log(res.data.records)
         this.comments = res.data.records;
         this.total = res.data.total
         this.loading = false

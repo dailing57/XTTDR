@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <Aside/>
+      <Aside :user="user"/>
       <el-container>
         <Header :user="user"/>
         <el-main>

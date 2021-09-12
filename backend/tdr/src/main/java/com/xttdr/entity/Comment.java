@@ -21,7 +21,7 @@ public class Comment {
     private String courseId;
     private String parentId;
     @TableField(exist = false)
-    private String parentComment;
+    private Comment parentComment;
     @TableField(exist = false)
     private String avatar;
 }
