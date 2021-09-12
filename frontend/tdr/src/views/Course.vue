@@ -64,7 +64,6 @@ export default {
       total: 0,
       tableData: [],
       addStudyId: '',
-      // filesUploadUrl: "http://" + window.server.filesUploadUrl + ":9090/files/upload",
       ids: []
     }
   },

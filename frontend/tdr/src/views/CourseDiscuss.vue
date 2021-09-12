@@ -1,6 +1,6 @@
 <template>
   <div style="margin-top: 10px; margin-bottom: 80px">
-    <el-card>
+    <el-card v-loading="this.loading">
       <div style="padding: 20px; color: #888">
         <div>
           <el-input type="textarea" :rows="3" v-model="entity.content"></el-input>
@@ -16,7 +16,7 @@
           <div><b style="font-size: 14px">{{ item.id }}</b></div>
           <div style="padding: 10px 0; color: #888">
             {{ item.content }}
-            <el-button type="text" size="mini" @click="del(item.id)" v-if="item.id === user.id">删除</el-button>
+            <el-button type="text" size="mini" @click="del(item.commentId)" v-if="item.id === user.id">删除</el-button>
           </div>
           <div style="background-color: #eee; padding: 10px" v-if="item.parentComment">{{ item.id }}：{{ item.parentComment.content }}</div>
           <div style="color: #888; font-size: 12px">
@@ -118,27 +118,27 @@ export default {
       this.entity.courseId = this.courseId
       if (!this.user.id) {
         this.$message({
-          comment: "请登录",
+          message: "请登录",
           type: "warning"
         });
         return;
       }
       if (!this.entity.content) {
         this.$message({
-          comment: "请填写内容",
-          type: "warning"
+          type: "warning",
+          message: "请填写内容"
         });
         return;
       }
       request.post("/comment/add", this.entity).then(res => {
         if (res.code === '0') {
           this.$message({
-            comment: "评论成功",
+            message: "评论成功",
             type: "success"
           });
         } else {
           this.$message({
-            comment: res.msg,
+            message: res.msg,
             type: "error"
           });
         }
@@ -150,7 +150,7 @@ export default {
     del(id) {
       request.post("/comment/delete/" + id).then(res => {
         this.$message({
-          comment: "删除成功",
+          message: "删除成功",
           type: "success"
         });
         this.loadComment()
