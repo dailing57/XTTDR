@@ -1,7 +1,8 @@
 <template>
   <div class="course-page">
     <el-row :gutter="0">
-      <el-col :span="12"><el-button type="primary" @click="add">加入课程</el-button></el-col>
+      <el-col :span="6"><el-button type="primary" @click="add">加入课程</el-button></el-col>
+      <el-col :span="6"><el-button type="primary" @click="this.vis = true">添加课程</el-button></el-col>
       <el-col :span="12">
         <div style="margin: 10px 0">
           <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable></el-input>
@@ -45,6 +46,20 @@
     </template>
   </el-dialog>
 
+  <el-dialog title="添加课程" v-model="this.vis" width="30%">
+    <el-form label-width="120px">
+      <el-form-item label="课程名称">
+        <el-input v-model="courseName" style="width: 80%"></el-input>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="this.vis = false">取 消</el-button>
+        <el-button type="primary" @click="saveCourse">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script>
@@ -54,6 +69,7 @@ export default {
   name: "Course",
   data() {
     return {
+      vis: false,
       user: {},
       loading: true,
       form: {},
@@ -64,6 +80,7 @@ export default {
       total: 0,
       tableData: [],
       addStudyId: '',
+      courseName: '',
       ids: []
     }
   },
@@ -91,7 +108,7 @@ export default {
       this.dialogVisible = true
     },
     save(){
-      request.post("/course/addStudy", {params: {
+      request.post("/course/addStudy", null,{params: {
           addStudyId: this.addStudyId
         }
       }).then(res => {
@@ -113,6 +130,26 @@ export default {
     enterCourse(courseId){
       this.$store.commit('setCourseId',courseId)
       this.$router.push('/coursePage')
+    },
+    saveCourse(){
+      request.post("/course/add", null,{params: {
+          name: this.courseName
+        }
+      }).then(res => {
+        if (res.code === '0') {
+          this.$message({
+            type: "success",
+            message: "新建课堂成功"
+          })
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.load() // 刷新表格的数据
+        this.vis = false  // 关闭弹窗
+      })
     },
     handleSizeChange(pageSize) {   // 改变当前每页的个数触发
       this.pageSize = pageSize

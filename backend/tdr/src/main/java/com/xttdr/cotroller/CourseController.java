@@ -1,10 +1,12 @@
 package com.xttdr.cotroller;
 
+import cn.hutool.core.util.IdUtil;
 import com.xttdr.common.Result;
 import com.xttdr.entity.Course;
 import com.xttdr.entity.DoCourse;
 import com.xttdr.mapper.DoCourseMapper;
 import com.xttdr.service.CourseServiceImpl;
+import org.apache.ibatis.annotations.Results;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,7 +27,7 @@ public class CourseController extends BaseController{
     }
 
     @PostMapping("/addStudy")
-    public Result<?> addStudy(@RequestParam(defaultValue = "1") String addStudyId){
+    public Result<?> addStudy(@RequestParam String addStudyId){
         return courseService.addStudy(addStudyId, getAccountId());
     }
 
@@ -34,13 +36,26 @@ public class CourseController extends BaseController{
         return courseService.getCourseByCourseId(id);
     }
 
+    @GetMapping("/studentList")
+    public Result<?> getStudentList(@RequestParam String courseId){
+        return courseService.getStudentList(courseId);
+    }
+
+    @PostMapping("/deleteStudent")
+    public Result<?> deleteStudent(@RequestParam String courseId,
+                                   @RequestParam String studentId){
+        return courseService.deleteStudyByTeacher(courseId,studentId);
+    }
+
     @PostMapping("/add")
-    public Result<?> addCourse(@RequestBody Course course){
+    public Result<?> addCourse(@RequestParam String name){
         if(getAccountId().equals("student")){
             return Result.error("-1","没有权限");
         }
-        course.setCreatedTime(new Date());
-        return courseService.addCourse(course);
+        String courseId = IdUtil.fastSimpleUUID();
+        Course course = new Course(courseId,name,getAccountId(),new Date());
+        courseService.addCourse(course);
+        return courseService.addStudy(courseId,getAccountId());
     }
     @PostMapping("/update")
     public Result<?> updateCourse(@RequestBody Course course){
@@ -55,6 +70,13 @@ public class CourseController extends BaseController{
             return Result.error("-1","没有权限");
         }
         return courseService.deleteByCourseId(courseId);
+    }
+    @PostMapping("/deleteStudy/{courseId}")
+    public Result<?> deleteStudy(@PathVariable String courseId){
+        if(getAccountId().equals("student")){
+            return Result.error("-1","没有权限");
+        }
+        return courseService.deleteStudy(courseId);
     }
     @PostMapping("/deleteBatch")
     public Result<?> deleteBatch(@RequestBody List<String> ids){

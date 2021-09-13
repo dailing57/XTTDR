@@ -33,6 +33,13 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    public Result<?> getStudentList(String courseId) {
+        QueryWrapper<DoCourse> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("course_id",courseId);
+        return Result.success(doCourseMapper.selectList(queryWrapper));
+    }
+
+    @Override
     public Result<?> addCourse(Course course) {
         courseMapper.insert(course);
         return Result.success();
@@ -48,6 +55,22 @@ public class CourseServiceImpl implements CourseService{
         QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("course_id",courseId);
         courseMapper.delete(queryWrapper);
+        return Result.success();
+    }
+
+    @Override
+    public Result<?> deleteStudy(String courseId) {
+        QueryWrapper<DoCourse> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("course_id",courseId);
+        doCourseMapper.delete(queryWrapper);
+        return Result.success();
+    }
+
+    @Override
+    public Result<?> deleteStudyByTeacher(String courseId, String id) {
+        QueryWrapper<DoCourse> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("course_id",courseId).eq("student_id",id);
+        doCourseMapper.delete(queryWrapper);
         return Result.success();
     }
 
