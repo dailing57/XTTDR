@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80023
 File Encoding         : 65001
 
-Date: 2021-09-12 16:52:25
+Date: 2021-09-13 12:38:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,21 +44,17 @@ CREATE TABLE `comment` (
   `ID` varchar(32) DEFAULT NULL COMMENT '账号',
   `CREATED_TIME` datetime DEFAULT NULL COMMENT '发表时间',
   `COURSE_ID` varchar(60) DEFAULT NULL COMMENT '课程编号',
-  `PARENT_ID` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `PARENT_ID` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`COMMENT_ID`),
   KEY `ID` (`ID`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `account` (`ID`)
+  KEY `parent_id` (`PARENT_ID`),
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `account` (`ID`),
+  CONSTRAINT `parent_id` FOREIGN KEY (`PARENT_ID`) REFERENCES `comment` (`COMMENT_ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论';
 
 -- ----------------------------
 -- Records of comment
 -- ----------------------------
-INSERT INTO `comment` VALUES ('118d1210ec00432e932faa853498c4af', 'hhh', 'teacher', '2021-09-12 13:56:24', '1', '23ed18b9250a42cdb50e6289ee5ece73');
-INSERT INTO `comment` VALUES ('23ed18b9250a42cdb50e6289ee5ece73', '9999', 'teacher', '2021-09-12 13:55:37', '1', '756f1ad092da4c83b7f4f7118089fce8');
-INSERT INTO `comment` VALUES ('756f1ad092da4c83b7f4f7118089fce8', '222', 'teacher', '2021-09-12 13:14:44', '1', 'teacher');
-INSERT INTO `comment` VALUES ('a11e5f497e074d1da3f66d49acd74085', '111', 'teacher', '2021-09-11 22:59:13', '1', null);
-INSERT INTO `comment` VALUES ('d051a7a0e20f4d4093c50b626f69b21b', '111', 'teacher', '2021-09-11 22:58:17', '1', null);
-INSERT INTO `comment` VALUES ('da16e32b5be844079d44875824a26f6a', '111', 'teacher', '2021-09-11 22:58:22', '1', null);
 
 -- ----------------------------
 -- Table structure for course
@@ -214,7 +210,7 @@ CREATE TABLE `homework` (
 -- ----------------------------
 INSERT INTO `homework` VALUES ('1', '作业测试1', 'teacher', '2021-09-09 20:04:29', '2021-09-10 20:04:32', '耶耶耶', '1');
 INSERT INTO `homework` VALUES ('3', '作业测试3', 'teacher', '2021-09-09 20:04:29', '2021-09-10 20:04:32', '耶耶耶', '2');
-INSERT INTO `homework` VALUES ('4942af3382c7451891f693ea11d91924', '测试作业2', 'teacher', '2021-09-11 08:00:00', '2021-09-12 08:00:00', '<p>嘿嘿嘿</p>', '1');
+INSERT INTO `homework` VALUES ('4942af3382c7451891f693ea11d91924', '测试作业2', 'teacher', '2021-09-11 08:00:00', '2021-09-12 08:00:00', '<p>嘿嘿嘿咕咕咕</p>', '1');
 
 -- ----------------------------
 -- Table structure for paper
@@ -291,3 +287,20 @@ CREATE TABLE `user` (
 INSERT INTO `user` VALUES ('1', '1', 'dl', '1', null);
 INSERT INTO `user` VALUES ('student', 'S0', 'sss', '1', null);
 INSERT INTO `user` VALUES ('teacher', 'T0', 'ttt', '1', 'http://localhost:9090/files/avatar/75c87d67598a479ebe4575b46f8677f3oakCenter1.png');
+
+-- ----------------------------
+-- Table structure for video
+-- ----------------------------
+DROP TABLE IF EXISTS `video`;
+CREATE TABLE `video` (
+  `VIDEO_ID` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `COURSE_ID` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `PATH` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `CREATED_TIME` date DEFAULT NULL,
+  `NAME` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`VIDEO_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of video
+-- ----------------------------

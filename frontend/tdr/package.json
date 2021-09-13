@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@cloudgeek/vue3-video-player": "^0.3.3",
     "axios": "^0.21.3",
     "core-js": "^3.6.5",
     "element-plus": "^1.1.0-beta.8",

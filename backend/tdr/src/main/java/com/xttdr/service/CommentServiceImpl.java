@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Result<?> getCommentsByPage(Integer pageNum, Integer pageSize, String courseId) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("course_id",courseId);
+        queryWrapper.eq("course_id",courseId).orderByDesc("created_time");
         IPage<Comment> commentIPage = commentMapper.selectPage(new Page<>(pageNum,pageSize),queryWrapper);
         for (Comment record : commentIPage.getRecords()) {
             String userAvatar = userMapper.selectById(record.getId()).getAvatar();

@@ -189,7 +189,6 @@ export default {
       this.form.content = editor.txt.html()  // 获取 编辑器里面的值，然后赋予到实体当中
       if (this.form.homeworkId) {  // 更新
         request.post("/homework/update", this.form).then(res => {
-          console.log(res)
           if (res.code === '0') {
             this.$message({
               type: "success",

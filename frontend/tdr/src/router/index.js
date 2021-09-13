@@ -44,6 +44,11 @@ const routes = [
             path: '/coursePage/homeworkList',
             name: 'homeworkList',
             component: () => import('@/views/HomeworkList')
+          },
+          {
+            path: '/coursePage/videoList',
+            name: 'videoList',
+            component: () => import('@/views/VideoList')
           }
         ]
       }

@@ -23,11 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 public class FileUtils {
-    @Value("${server.port}")
-    private String port;
-
-    @Value("${file.ip}")
-    private String ip;
 
     public String upload(MultipartFile file,String prefix) throws IOException {
         String originalFilename = file.getOriginalFilename();  // 获取源文件的名称
@@ -62,13 +57,11 @@ public class FileUtils {
             System.out.println("error");
         }
     }
-
     public Boolean deleteFile(String path){
         path = System.getProperty("user.dir") + "/files/" + path;
         System.out.println(path);
         return FileSystemUtils.deleteRecursively(new File(path));
     }
-
     public ResponseEntity<InputStreamResource> downloadFile(String path)
             throws IOException {
         String filePath = System.getProperty("user.dir") + "/files/" + path;
@@ -78,29 +71,11 @@ public class FileUtils {
         headers.add("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFilename()));
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
-
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .contentLength(file.contentLength())
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new InputStreamResource(file.getInputStream()));
-    }
-
-    @PostMapping("/editor/upload")
-    public JSON editorUpload(MultipartFile file) throws IOException {
-        String originalFilename = file.getOriginalFilename();  // 获取源文件的名称
-        String flag = IdUtil.fastSimpleUUID();// 定义文件的唯一标识（前缀）
-        String rootFilePath = System.getProperty("user.dir") + "/files/" + flag + "_" + originalFilename;  // 获取上传的路径
-        cn.hutool.core.io.FileUtil.writeBytes(file.getBytes(), rootFilePath);  // 把文件写入到上传的路径
-        String url = ip + ":" + port + "/files/" + flag;
-        JSONObject json = new JSONObject();
-        json.set("errno", 0);
-        JSONArray arr = new JSONArray();
-        JSONObject data = new JSONObject();
-        arr.add(data);
-        data.set("url", url);
-        json.set("data", arr);
-        return json;  // 返回结果 url
     }
 }
