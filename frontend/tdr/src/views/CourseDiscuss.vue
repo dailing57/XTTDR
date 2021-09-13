@@ -18,7 +18,7 @@
             {{ item.content }}
             <el-button type="text" size="mini" @click="del(item.commentId)" v-if="item.id === user.id">删除</el-button>
           </div>
-          <div style="background-color: #eee; padding: 10px" v-if="item.parentComment">{{ item.id }}：{{ item.parentComment.content }}</div>
+          <div style="background-color: #eee; padding: 10px" v-if="item.parentComment">{{ item.parentComment.id }}：{{ item.parentComment.content }}</div>
           <div style="color: #888; font-size: 12px">
             <span>{{ item.createdTime  }}</span>
             <el-button type="text" style="margin-left: 20px" @click="reReply(item.commentId)">回复</el-button>

@@ -56,7 +56,9 @@ public class CommentServiceImpl implements CommentService{
                 record.setAvatar("https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png");
             }
             String parentId = record.getParentId();
-            record.setParentComment(commentMapper.selectById(parentId));
+            if(parentId != null){
+                record.setParentComment(commentMapper.selectById(parentId));
+            }
         }
         return Result.success(commentIPage);
     }
