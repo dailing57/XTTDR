@@ -23,7 +23,7 @@
             <span>课程列表</span>
           </template>
           <el-menu-item-group v-for="(item,index) in this.videoList">
-            <el-menu-item :index="index" @click="changeSource(item.path)">{{item.name}}</el-menu-item>
+            <el-menu-item :index="index.toString()" @click="changeSource(item.path)">{{item.name}}</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
       </el-menu>

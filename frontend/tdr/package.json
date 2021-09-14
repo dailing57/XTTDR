@@ -10,6 +10,7 @@
     "@cloudgeek/vue3-video-player": "^0.3.3",
     "axios": "^0.21.3",
     "core-js": "^3.6.5",
+    "echarts": "^5.2.0",
     "element-plus": "^1.1.0-beta.8",
     "js-file-download": "^0.4.12",
     "vue": "^3.0.0",

@@ -16,4 +16,5 @@ public interface CourseService {
     Result<?> deleteByCourseId(String id);
     Result<?> deleteBatch(List<String> ids);
     Result<?> addStudy(String courseId,String id);
+    Integer courseCount(String id);
 }

@@ -8,4 +8,5 @@ public interface CommentService {
     Result<?> updateComment(Comment comment);
     Result<?> deleteComment(String id);
     Result<?> getCommentsByPage(Integer pageNum,Integer pageSize, String courseId);
+    Integer commentCount(String id);
 }

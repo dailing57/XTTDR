@@ -104,4 +104,19 @@ public class HomeworkServiceImpl implements HomeworkService{
         doHomeworkMapper.update(null,doHomeworkUpdateWrapper);
         return Result.success();
     }
+
+    @Override
+    public Double getAverageScore(String id) {
+        return doHomeworkMapper.getAverageScore(id);
+    }
+
+    @Override
+    public Integer getSubmitCount(String id) {
+        return doHomeworkMapper.getSubmitCount(id);
+    }
+
+    @Override
+    public Double getRate(String id, Double score) {
+        return Double.valueOf(doHomeworkMapper.getRate(id, score));
+    }
 }

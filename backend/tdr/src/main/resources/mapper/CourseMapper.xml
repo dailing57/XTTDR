@@ -11,4 +11,10 @@
             and a.name like "%"#{search}"%"
         </if>
     </select>
+
+    <select id="courseCount" resultType="Integer">
+        select count(*)
+        from docourse
+        where student_id = #{id}
+    </select>
 </mapper>

@@ -19,4 +19,7 @@ public interface HomeworkService {
     Result<?> submittedHomework(Integer pageNum,Integer pageSize,String homeworkId);
     Result<?> deleteSubmit(String homeworkId,String path, String id);
     Result<?> updateScore(String homeworkId, String id,Double score);
+    Double getAverageScore(String id);
+    Integer getSubmitCount(String id);
+    Double getRate(String id,Double score);
 }

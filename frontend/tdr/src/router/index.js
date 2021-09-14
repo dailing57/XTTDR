@@ -51,6 +51,11 @@ const routes = [
             component: () => import('@/views/VideoList')
           }
         ]
+      },
+      {
+        path: '/statistics',
+        name: 'statistics',
+        component: () => import('@/views/Statistics')
       }
     ]
   },
