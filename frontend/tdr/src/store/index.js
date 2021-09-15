@@ -4,7 +4,8 @@ export default createStore({
   state: {
     user: {},
     curCourseId: '',
-    curHomeworkId: ''
+    curHomeworkId: '',
+    curExamId: '',
   },
   mutations: {
     setUser(state, user) {
@@ -15,6 +16,9 @@ export default createStore({
     },
     setHomeworkId(state,homeworkId){
       state.curHomeworkId = homeworkId
+    },
+    setExamId(state,examId){
+      state.curExamId=examId
     }
   },
   actions: {

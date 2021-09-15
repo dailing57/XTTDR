@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80023
 File Encoding         : 65001
 
-Date: 2021-09-14 19:19:13
+Date: 2021-09-15 23:42:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -187,7 +187,7 @@ CREATE TABLE `exam` (
   `CREATED_TIME` datetime DEFAULT NULL COMMENT '创建时间',
   `TEACHER_ID` varchar(32) DEFAULT NULL COMMENT '教师账号',
   `BEGINTIME` datetime DEFAULT NULL COMMENT '开始时间',
-  `LASTTIME` varchar(60) DEFAULT NULL COMMENT '考试时长',
+  `LASTTIME` double DEFAULT NULL COMMENT '考试时长',
   PRIMARY KEY (`EXAM_ID`),
   KEY `exam_course_id` (`COURSE_ID`),
   KEY `exam_teacher_id` (`TEACHER_ID`),
@@ -200,6 +200,8 @@ CREATE TABLE `exam` (
 -- ----------------------------
 -- Records of exam
 -- ----------------------------
+INSERT INTO `exam` VALUES ('28fbb66181ca4fcfb1488f5656edbdbf', '1', '1', '2021-09-15 16:27:11', 'teacher', '2021-09-15 16:27:09', '1');
+INSERT INTO `exam` VALUES ('93b964c529264a1bbcf6947c4a429641', 'sdf', '1', '2021-09-15 23:38:41', 'teacher', '2021-09-23 05:00:00', '2.5');
 
 -- ----------------------------
 -- Table structure for homework
@@ -246,6 +248,8 @@ CREATE TABLE `paper` (
 -- ----------------------------
 -- Records of paper
 -- ----------------------------
+INSERT INTO `paper` VALUES ('28fbb66181ca4fcfb1488f5656edbdbf', 'eb7edd54b6f448148e26ec70d5c61d6f');
+INSERT INTO `paper` VALUES ('28fbb66181ca4fcfb1488f5656edbdbf', '0ea2eea138714a2cb345e76c4c8bc463');
 
 -- ----------------------------
 -- Table structure for problem
@@ -260,7 +264,7 @@ CREATE TABLE `problem` (
   `OPTION_B` varchar(60) DEFAULT NULL COMMENT '选项B',
   `OPTION_C` varchar(60) DEFAULT NULL COMMENT '选项C',
   `OPTION_D` varchar(60) DEFAULT NULL COMMENT '选项D',
-  `ANWSER` varchar(60) DEFAULT NULL COMMENT '答案',
+  `ANSWER` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '答案',
   `PARSE` varchar(60) DEFAULT NULL COMMENT '解析',
   PRIMARY KEY (`PROBLEM_ID`),
   KEY `TEACHER_ID` (`TEACHER_ID`),
@@ -270,6 +274,12 @@ CREATE TABLE `problem` (
 -- ----------------------------
 -- Records of problem
 -- ----------------------------
+INSERT INTO `problem` VALUES ('0ea2eea138714a2cb345e76c4c8bc463', 'dsf', 'teacher', '2021-09-15 22:44:25', 'as', 'f', 'b', 'd', 'A', 'saf');
+INSERT INTO `problem` VALUES ('1b96dcc4b6f44f6eb27bf645bf9a72e2', null, 'teacher', '2021-09-15 22:06:43', null, null, null, null, null, null);
+INSERT INTO `problem` VALUES ('47cc40aeb4e84b489ebe1256b0b0dee2', '1', 'teacher', '2021-09-15 17:13:11', '1', '1', '1', '1', 'B', 'dsaf');
+INSERT INTO `problem` VALUES ('a7b9bf3da464433ab8ef81a0a7ea8bf9', '1', 'teacher', '2021-09-15 17:10:04', '1', '1', '2', '3', 'B', 'sfds');
+INSERT INTO `problem` VALUES ('ac920a02cba6421a94b28573370e95cd', 's', 'teacher', '2021-09-15 22:44:08', 'a', 'a', 'f', 'b', 'B', 'sdf');
+INSERT INTO `problem` VALUES ('eb7edd54b6f448148e26ec70d5c61d6f', 's', 'teacher', '2021-09-15 19:26:15', 'a', 'a', 'a', 'a', 'B', 'xc');
 
 -- ----------------------------
 -- Table structure for school

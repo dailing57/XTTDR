@@ -53,6 +53,16 @@ const routes = [
         ]
       },
       {
+        path: '/exam',
+        name: 'exam',
+        component: () => import('@/views/Exam')
+      },
+      {
+        path: '/editExam',
+        name: 'editExam',
+        component: () => import('@/views/ExamEditor')
+      },
+      {
         path: '/statistics',
         name: 'statistics',
         component: () => import('@/views/Statistics')

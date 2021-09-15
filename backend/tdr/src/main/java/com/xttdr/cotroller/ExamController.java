@@ -60,10 +60,14 @@ public class ExamController extends BaseController{
     }
 
     @PostMapping("/problems/add")
-    public Result<?> addProblem(@RequestParam Problem problem,
+    public Result<?> addProblem(@RequestBody Problem problem,
                                 @RequestParam(defaultValue = "") String examId){
+        problem.setCreatedDate(new Date());
+        problem.setTeacherId(getAccountId());
+        problem.setProblemId(IdUtil.fastSimpleUUID());
         Result<?> res = problemService.addProblem(problem);
-        if(res.getCode().equals("-1") && !examId.equals(""))
+        System.out.println(examId+" "+problem.getProblemId());
+        if(res.getCode().equals("0") && !examId.equals(""))
             res = paperService.addProblemById(examId, problem.getProblemId());
         return res;
     }
@@ -97,38 +101,38 @@ public class ExamController extends BaseController{
 
     //考卷相关
     @PostMapping("/paper/addProblem")
-    public Result<?> addProblemToPaper(@RequestParam String paperId, @RequestParam String problemId){
-        if(!getAccountId().equals(examService.getTeacherIdByPaperId(paperId).getData()))
+    public Result<?> addProblemToPaper(@RequestParam String examId, @RequestParam String problemId){
+        if(!getAccountId().equals(examService.getTeacherIdByPaperId(examId).getData()))
             return Result.error("-1","无权限");
-        return paperService.addProblemById(paperId, problemId);
+        return paperService.addProblemById(examId, problemId);
     }
 
     @PostMapping("/paper/addProblems")
-    public Result<?> addProblemsToPaper(@RequestParam String paperId, @RequestParam List<String> problemId){
-        if(!getAccountId().equals(examService.getTeacherIdByPaperId(paperId).getData()))
+    public Result<?> addProblemsToPaper(@RequestParam String examId, @RequestParam List<String> problemId){
+        if(!getAccountId().equals(examService.getTeacherIdByPaperId(examId).getData()))
             return Result.error("-1","无权限");
-        return paperService.addProblemById(paperId, problemId);
+        return paperService.addProblemById(examId, problemId);
     }
 
     @PostMapping("/paper/delete")
-    public Result<?> deleteProblemById(@RequestParam String paperId, @RequestParam String problemId){
-        if(!getAccountId().equals(examService.getTeacherIdByPaperId(paperId).getData()))
+    public Result<?> deleteProblemById(@RequestParam String examId, @RequestParam String problemId){
+        if(!getAccountId().equals(examService.getTeacherIdByPaperId(examId).getData()))
             return Result.error("-1","无权限");
-        return paperService.deleteProblemById(paperId, problemId);
+        return paperService.deleteProblemById(examId, problemId);
     }
 
     @PostMapping("/paper/deleteProblems")
-    public Result<?> deleteProblemsById(@RequestParam String paperId, @RequestParam List<String> problemId){
-        if(!getAccountId().equals(examService.getTeacherIdByPaperId(paperId).getData()))
+    public Result<?> deleteProblemsById(@RequestParam String examId, @RequestParam List<String> problemId){
+        if(!getAccountId().equals(examService.getTeacherIdByPaperId(examId).getData()))
             return Result.error("-1","无权限");
-        return paperService.deleteProblemById(paperId, problemId);
+        return paperService.deleteProblemById(examId, problemId);
     }
 
-    @PostMapping("/paper/delete")
-    public Result<?> deletePaper(@RequestParam String paperId){
-        if(!getAccountId().equals(examService.getTeacherIdByPaperId(paperId).getData()))
+    @PostMapping("/paper/delete/{examId}")
+    public Result<?> deletePaper(@PathVariable String examId){
+        if(!getAccountId().equals(examService.getTeacherIdByPaperId(examId).getData()))
             return Result.error("-1","无权限");
-        return paperService.clearPaperById(paperId);
+        return paperService.clearPaperById(examId);
     }
 
     @GetMapping("/export/{examId}")
@@ -160,11 +164,14 @@ public class ExamController extends BaseController{
     }
 
     @PostMapping("/add")
-    public Result<?> addExam(@RequestParam String courseId, @RequestParam String examName,
-                             @RequestParam Date beginTime, @RequestParam String lastTime){
+    public Result<?> addExam(@RequestBody Exam exam){
+        System.out.println(exam);
         String examId = IdUtil.fastSimpleUUID();
-        System.out.println("\n");
-        return examService.addExam(new Exam(examId, examName, "1", new Date(), getAccountId(), beginTime, lastTime));
+        exam.setExamId(examId);
+        exam.setCreatedTime(new Date());
+        exam.setTeacherId(getAccountId());
+        System.out.println("\n"+exam+"\n");
+        return examService.addExam(exam);
     }
 
     @PostMapping("/update")

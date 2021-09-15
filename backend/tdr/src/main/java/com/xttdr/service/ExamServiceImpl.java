@@ -65,7 +65,7 @@ public class ExamServiceImpl implements ExamService {
         List<Problem> problems = (List<Problem>)(problemService.getProblemByExamId(exam.getExamId()).getData());
         Integer score = 0;
         for(int i = 0; i < answer.size(); i++)
-            if(answer.get(i).equals(problems.get(i).getAnwser()))
+            if(answer.get(i).equals(problems.get(i).getAnswer()))
                 score++;
         doExam.setScore(score*10);
         QueryWrapper<DoExam> queryWrapper = new QueryWrapper<DoExam>().eq("exam_id", doExam.getExamId()).eq("id",doExam.getId());
@@ -98,7 +98,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public Result<?> getTeacherIdByPaperId(String paperId) {
-        QueryWrapper<Exam> queryWrapper = new QueryWrapper<Exam>().eq("content",paperId);
+        QueryWrapper<Exam> queryWrapper = new QueryWrapper<Exam>().eq("exam_id",paperId);
         return Result.success(examMapper.selectOne(queryWrapper).getTeacherId());
     }
 

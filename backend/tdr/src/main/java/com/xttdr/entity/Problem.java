@@ -22,8 +22,7 @@ public class Problem {
     private String optionB;
     private String optionC;
     private String optionD;
-    //数据库内字段拼写有误？
-    private String anwser;
+    private String answer;
     private String parse;
 }
 

@@ -20,6 +20,6 @@ public class Exam {
     private Date createdTime;
     private String teacherId;
     private Date begintime;
-    private String lasttime;
+    private Double lasttime;
 }
 

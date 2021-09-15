@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service("ProblemServiceImpl")
 public class ProblemServiceImpl implements ProblemService{
@@ -31,13 +30,13 @@ public class ProblemServiceImpl implements ProblemService{
     }
 
     @Override
-    public Result<?> getProblemByExamId(String paperId) {
-        return Result.success(problemMapper.getProblemByPaperId(paperId));
+    public Result<?> getProblemByExamId(String examId) {
+        return Result.success(problemMapper.getProblemByPaperId(examId));
     }
 
     @Override
-    public Result<?> getProblemByExamId(Integer pageNum, Integer pageSize, String paperId) {
-        return Result.success(problemMapper.getProblemByPaperId(new Page<Problem>(pageNum,pageSize), paperId));
+    public Result<?> getProblemByExamId(Integer pageNum, Integer pageSize, String examId) {
+        return Result.success(problemMapper.getProblemByPaperId(new Page<Problem>(pageNum,pageSize), examId));
     }
 
     @Override
@@ -95,7 +94,7 @@ public class ProblemServiceImpl implements ProblemService{
                 problem.setOptionB(row.getCell(3).getStringCellValue());
                 problem.setOptionC(row.getCell(4).getStringCellValue());
                 problem.setOptionD(row.getCell(5).getStringCellValue());
-                problem.setAnwser(row.getCell(6).getStringCellValue());
+                problem.setAnswer(row.getCell(6).getStringCellValue());
                 problem.setParse(row.getCell(7).getStringCellValue());
                 addProblem(problem);
             }

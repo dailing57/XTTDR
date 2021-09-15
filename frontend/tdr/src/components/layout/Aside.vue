@@ -23,8 +23,7 @@
       <el-sub-menu index="2">
         <template #title><i class="el-icon-menu"></i>考试管理</template>
         <el-menu-item-group>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
+          <el-menu-item index="/exam">所有考试</el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
       <el-sub-menu index="3">

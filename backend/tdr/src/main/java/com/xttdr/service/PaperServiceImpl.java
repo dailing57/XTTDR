@@ -27,48 +27,48 @@ public class PaperServiceImpl implements PaperService{
     ProblemService problemService;
 
     @Override
-    public Result<?> addProblemById(String paperId, String problemId) {
-        Paper tmp = new Paper(paperId, problemId);
+    public Result<?> addProblemById(String examId, String problemId) {
+        Paper tmp = new Paper(examId, problemId);
         if(paperMapper.insert(tmp) > 0)
             return Result.success();
         return Result.error("-1", "添加失败");
     }
 
     @Override
-    public Result<?> addProblemById(String paperId, List<String> problemId) {
+    public Result<?> addProblemById(String examId, List<String> problemId) {
         for(String str : problemId) {
-            Paper tmp = new Paper(paperId, str);
+            Paper tmp = new Paper(examId, str);
             paperMapper.insert(tmp);
         }
         return Result.success();
     }
 
     @Override
-    public Result<?> deleteProblemById(String paperId, String problemId) {
+    public Result<?> deleteProblemById(String examId, String problemId) {
         QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("paper_id", paperId).eq("problem_id", problemId);
+        queryWrapper.eq("exam_id", examId).eq("problem_id", problemId);
         paperMapper.delete(queryWrapper);
         return Result.success();
     }
 
     @Override
-    public Result<?> deleteProblemById(String paperId, List<String> problemId) {
+    public Result<?> deleteProblemById(String examId, List<String> problemId) {
         QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("paper_id", paperId).in("problem_id", problemId);
+        queryWrapper.eq("exam_id", examId).in("problem_id", problemId);
         paperMapper.delete(queryWrapper);
         return Result.success();
     }
 
     @Override
-    public Result<?> clearPaperById(String paperId) {
+    public Result<?> clearPaperById(String examId) {
         QueryWrapper<Paper> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("paper_id", paperId);
+        queryWrapper.eq("exam_id", examId);
         paperMapper.delete(queryWrapper);
         return Result.success();
     }
 /*
-    public Result<?> copyPaperById(String paperId, String newId){
-        QueryWrapper<Paper> queryWrapper = new QueryWrapper<Paper>().eq("paper_id", paperId);
+    public Result<?> copyPaperById(String examId, String newId){
+        QueryWrapper<Paper> queryWrapper = new QueryWrapper<Paper>().eq("exam_id", examId);
         List<Paper> papers = paperMapper.selectList(queryWrapper);
         for(Paper paper : papers){
             paper.setPaperId(newId);
@@ -80,8 +80,8 @@ public class PaperServiceImpl implements PaperService{
 
     @SuppressWarnings("unchecked")
     @Override
-    public Result<?> exportPaperWithExcel(String paperId) {
-        HSSFWorkbook workbook = getWorkbook(paperId);
+    public Result<?> exportPaperWithExcel(String examId) {
+        HSSFWorkbook workbook = getWorkbook(examId);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try{
             workbook.write(os);
@@ -100,8 +100,8 @@ public class PaperServiceImpl implements PaperService{
         return Result.error("-1","失败");
     }
 
-    private HSSFWorkbook getWorkbook(String paperId){
-        List<Problem> problems = (List<Problem>) problemService.getProblemByExamId(paperId).getData();
+    private HSSFWorkbook getWorkbook(String examId){
+        List<Problem> problems = (List<Problem>) problemService.getProblemByExamId(examId).getData();
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("sheet1");
         HSSFRow row = sheet.createRow(0);
@@ -123,7 +123,7 @@ public class PaperServiceImpl implements PaperService{
                     case 3: cell.setCellValue(tmp.getOptionB()); break;
                     case 4: cell.setCellValue(tmp.getOptionC()); break;
                     case 5: cell.setCellValue(tmp.getOptionD()); break;
-                    case 6: cell.setCellValue(tmp.getAnwser()); break;
+                    case 6: cell.setCellValue(tmp.getAnswer()); break;
                     case 7: cell.setCellValue(tmp.getParse()); break;
                 }
             }
