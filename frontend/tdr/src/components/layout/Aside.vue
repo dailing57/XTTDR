@@ -32,6 +32,12 @@
           <el-menu-item index="/statistics">查看统计</el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
+      <el-sub-menu index="4" v-if="user.userType === 'admin'">
+        <template #title><i class="el-icon-setting"></i>系统管理</template>
+        <el-menu-item-group>
+          <el-menu-item index="/manage">人员管理</el-menu-item>
+        </el-menu-item-group>
+      </el-sub-menu>
     </el-menu>
   </el-aside>
 </template>

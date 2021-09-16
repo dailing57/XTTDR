@@ -22,8 +22,6 @@
             <el-radio-button label="admin">管理员</el-radio-button>
           </el-radio-group>
         </div>
-
-
         <el-form-item>
           <el-button style="width: 100%" type="primary" @click="login">登 录</el-button>
         </el-form-item>
@@ -54,12 +52,6 @@ export default {
         ],
       },
       validCode: ''
-      // 加背景图片
-      // bg: {
-      //   backgroundImage: "url(" + require("@/assets/bg.jpg") + ")",
-      //   backgroundRepeat: "no-repeat",
-      //   backgroundSize: "100% 100%"
-      // }
     }
   },
   created() {

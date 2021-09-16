@@ -2,7 +2,7 @@
   <el-card>
     <el-row class="tac">
       <el-col :span="12">
-        <div id="studyChart" :style="{width: '400px', height: '400px'}"></div>
+        <div id="studyChart" :style="{width: '480px', height: '400px'}"></div>
       </el-col>
       <el-col :span="12">
         <div id="homeworkChart" :style="{width: '400px', height: '400px'}"></div>
@@ -42,7 +42,7 @@ export default {
               { text: '作业平均成绩', max: 5 },
               { text: '作业提交次数', max: 10 },
               { text: '课程数量', max: 10 },
-              { text: '考试平均成绩', max: 5 },
+              { text: '考试平均成绩', max: 100 },
             ],
             center: ['55%', '45%'],
             radius: 120,

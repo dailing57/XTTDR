@@ -29,6 +29,26 @@ public class ExamServiceImpl implements ExamService {
     CourseServiceImpl courseService;
 
     @Override
+    public Double getAverageScore(String id) {
+        return doExamMapper.getAverageScore(id);
+    }
+
+    @Override
+    public Result<?> getScore(String examId, String id) {
+        QueryWrapper<DoExam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("exam_id",examId).eq("id",id);
+        DoExam doExam = doExamMapper.selectOne(queryWrapper);
+        if(doExam==null)
+            return Result.error("-1","考试未发布");
+        return Result.success(doExam.getScore());
+    }
+
+    @Override
+    public Result<?> getExamByUser(Integer pageNum, Integer pageSize, String id) {
+        return Result.success(doExamMapper.getExamByUser(new Page<Exam>(pageNum,pageSize),id));
+    }
+
+    @Override
     public Result<?> getExamById(String examId) {
         return Result.success(examMapper.selectById(examId));
     }
@@ -61,17 +81,16 @@ public class ExamServiceImpl implements ExamService {
     @SuppressWarnings("unchecked")
     @Override
     public Result<?> scoreExam(DoExam doExam, List<String> answer) {
-        Exam exam = (Exam)getExamById(doExam.getExamId()).getData();
-        List<Problem> problems = (List<Problem>)(problemService.getProblemByExamId(exam.getExamId()).getData());
-        Integer score = 0;
+        List<String> correct = doExamMapper.getAnswer(doExam.getExamId());
+        double score = 0.0;
         for(int i = 0; i < answer.size(); i++)
-            if(answer.get(i).equals(problems.get(i).getAnswer()))
+            if(answer.get(i).equals(correct.get(i)))
                 score++;
-        doExam.setScore(score*10);
+        doExam.setScore(score*10.0);
         QueryWrapper<DoExam> queryWrapper = new QueryWrapper<DoExam>().eq("exam_id", doExam.getExamId()).eq("id",doExam.getId());
         if(doExamMapper.update(doExam, queryWrapper) > 0)
             return Result.success();
-        return Result.error("-1","上传失败");
+        return Result.error("-1","提交失败");
     }
 
     @Override
@@ -87,7 +106,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public Result<?> getDoExamByUserId(Integer pageNum, Integer pageSize, String userId) {
-        return Result.success(doExamMapper.getDoExamByExamId(new Page<DoExam>(pageNum, pageSize), userId));
+        return Result.success(doExamMapper.getDoExamByUserId(new Page<DoExam>(pageNum, pageSize), userId));
     }
 
     @Override
@@ -112,7 +131,7 @@ public class ExamServiceImpl implements ExamService {
         String courseId = ((Exam) getExamById(examId).getData()).getCourseId();
         List<DoCourse> students = (List<DoCourse>) courseService.getStudentList(courseId).getData();
         for(DoCourse student : students){
-            doExamMapper.insert(new DoExam(examId, student.getStudentId(), -1));
+            doExamMapper.insert(new DoExam(examId, student.getStudentId(), -1.0));
         }
         return Result.success();
     }

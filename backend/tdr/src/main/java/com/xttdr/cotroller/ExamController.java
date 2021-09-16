@@ -44,6 +44,10 @@ public class ExamController extends BaseController{
         return problemService.getProblemByExamId(pageNum, pageSize, examId);
     }
 
+    @GetMapping("/problems/doexam")
+    public Result<?> getProblemListByPaperId(@RequestParam String examId){
+        return problemService.getProblemByExamId(examId);
+    }
     @GetMapping("/problems/teacher")
     public Result<?> getProblemByTeacherId(@RequestParam(defaultValue = "1") Integer pageNum,
                                            @RequestParam(defaultValue = "10") Integer pageSize){
@@ -108,7 +112,7 @@ public class ExamController extends BaseController{
     }
 
     @PostMapping("/paper/addProblems")
-    public Result<?> addProblemsToPaper(@RequestParam String examId, @RequestParam List<String> problemId){
+    public Result<?> addProblemsToPaper(@RequestParam String examId, @RequestBody List<String> problemId){
         if(!getAccountId().equals(examService.getTeacherIdByPaperId(examId).getData()))
             return Result.error("-1","无权限");
         return paperService.addProblemById(examId, problemId);
@@ -148,6 +152,12 @@ public class ExamController extends BaseController{
     }
 
     //考试相关
+
+    @GetMapping("/examList")
+    public Result<?> getExamList(@RequestParam(defaultValue = "1") Integer pageNum,
+                                 @RequestParam(defaultValue = "10") Integer pageSize){
+        return examService.getExamByUser(pageNum,pageSize,getAccountId());
+    }
 
     @GetMapping("/id/{examId}")
     public Result<?> getExamByExamId(@PathVariable String examId){
@@ -197,21 +207,26 @@ public class ExamController extends BaseController{
     @GetMapping("/doExams/all")
     public Result<?> getDoExamByUserId(@RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize){
-        return examService.getDoExamByExamId(pageNum, pageSize, getAccountId());
+        return examService.getDoExamByUserId(pageNum, pageSize, getAccountId());
     }
 
     @GetMapping("/doExams/find/{examId}")
     public Result<?> getDoExamByExamId(@RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize,
                                        @PathVariable String examId){
-        return examService.getDoExamByUserId(pageNum, pageSize, examId);
+        return examService.getDoExamByExamId(pageNum, pageSize, examId);
     }
 
+    @GetMapping("/doExams/score")
+    public Result<?> getScore(@RequestParam String examId){
+        return examService.getScore(examId,getAccountId());
+    }
 
     @PostMapping("/doExams/judgeScore")
-    public Result<?> submitExam(@RequestParam DoExam doExam, @RequestParam List<String> answer){
-        if(doExam.getScore() > 0)
-            return Result.error("-1","重复提交");
+    public Result<?> submitExam(@RequestParam String examId, @RequestBody List<String> answer){
+        DoExam doExam = new DoExam();
+        doExam.setExamId(examId);
+        doExam.setId(getAccountId());
         return examService.scoreExam(doExam, answer);
     }
 }

@@ -31,7 +31,11 @@ public class ProblemServiceImpl implements ProblemService{
 
     @Override
     public Result<?> getProblemByExamId(String examId) {
-        return Result.success(problemMapper.getProblemByPaperId(examId));
+        List<Problem> problems = problemMapper.getProblemByPaperId(examId);
+        for (Problem problem : problems) {
+            problem.setAnswer("");
+        }
+        return Result.success(problems);
     }
 
     @Override

@@ -14,5 +14,21 @@
             where id = #{id}
         )
     </select>
-
+    <select id="getExamByUser" resultType="com.xttdr.entity.Exam">
+        select * from exam
+        where exam_id in (
+            select exam_id from doexam
+            where id = #{id}
+        )
+    </select>
+    <select id="getAnswer" resultType="String">
+        select answer
+        from paper a left join problem b on a.problem_id = b.problem_id
+        where exam_id = #{examId}
+    </select>
+    <select id="getAverageScore" resultType="Double">
+        select avg(score)
+        from doexam
+        where id = #{id}
+    </select>
 </mapper>

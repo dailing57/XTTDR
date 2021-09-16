@@ -63,9 +63,24 @@ const routes = [
         component: () => import('@/views/ExamEditor')
       },
       {
+        path: '/doExam',
+        name: 'doExam',
+        component: () => import('@/views/ExamEnter')
+      },
+      {
+        path: '/ProblemList',
+        name: 'ProblemList',
+        component: () => import('@/views/ProblemList')
+      },
+      {
         path: '/statistics',
         name: 'statistics',
         component: () => import('@/views/Statistics')
+      },
+      {
+        path: '/manage',
+        name: 'manage',
+        component: () => import('@/views/Manage')
       }
     ]
   },
@@ -78,7 +93,12 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import("@/views/Login")
-  }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import("@/views/Register")
+  },
 ]
 
 const router = createRouter({

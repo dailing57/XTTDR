@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class DoExam {
     private String examId;
     private String id;
-    private Integer score;
+    private Double score;
 }
 

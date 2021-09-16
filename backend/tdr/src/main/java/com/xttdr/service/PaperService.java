@@ -11,7 +11,6 @@ public interface PaperService {
     Result<?> deleteProblemById(String paperId, String problemId);
     Result<?> deleteProblemById(String paperId, List<String> problemId);
     Result<?> clearPaperById(String paperId);
-
     Result<?> exportPaperWithExcel(String paperId);
 
     //Result<?> copyPaperById(String paperId, String newId); //返回新构造的试卷编号

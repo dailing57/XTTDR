@@ -1,31 +1,58 @@
 <template>
-  <el-button size="mini" type="primary" style="margin-right: 10px" @click="handout">发布试卷</el-button>
-  <el-button size="mini" type="success" @click="problemBase">进入题库</el-button>
-  <el-tag>考试编号：{{this.examId}}</el-tag>
+  <el-button size="mini" type="primary" style="margin-right: 10px" @click="getinpaper">加入试卷</el-button>
+  <el-upload
+      v-if="user.userType !== 'student'"
+      class="upload-demo"
+      ref="upload"
+      multiple
+      action=""
+      style="display: inline"
+      :on-preview="handlePreview"
+      :on-remove="handleRemove"
+      :http-request="httpRequest"
+      :file-list="fileList"
+      :auto-upload="false"
+  >
+    <template #trigger>
+      <el-button size="mini" type="primary">选取文件</el-button>
+    </template>
+    <el-button
+        style="margin-left: 10px;"
+        size="mini"
+        type="success"
+        @click="submitUpload"
+    >上传文件
+    </el-button>
+  </el-upload>
   <el-card  v-loading="this.loading" style="margin-top: 10px">
-    <el-tag style="font-size: large">现有题目：</el-tag>
-    <el-card v-for="item in problems" style="font-size: larger;margin-top: 10px">
-      <el-row>
-        <el-button type="danger" size="mini" @click="deleteProblem(item.problemId)">删除</el-button>
-      </el-row>
-      <el-row>
-        {{item.describes}}
-      </el-row>
-      <el-row>
-        <el-col :span="6">A {{item.optionA}}</el-col>
-        <el-col :span="6">B {{item.optionB}}</el-col>
-        <el-col :span="6">C {{item.optionC}}</el-col>
-        <el-col :span="6">D {{item.optionD}}</el-col>
-      </el-row>
-      <el-row style="margin-top:10px;">
-        <el-tag style="font-size: medium;margin-right: 10px">答案：</el-tag>{{item.answer}}
-      </el-row>
-      <el-row style="margin-top:10px;">
-        <el-tag type="success" style="font-size: medium;margin-right: 10px">解析：</el-tag>{{item.parse}}
-      </el-row>
-    </el-card>
+    <el-tag style="font-size: large">题库题目：</el-tag>
+    <el-table
+        v-loading="loading"
+        :data="problems"
+        border
+        stripe
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+          type="selection"
+          width="55">
+      </el-table-column>
+      <el-table-column
+          prop="describes"
+          label="题目描述">
+      </el-table-column>
+      <el-table-column label="操作" width="80">
+        <template #default="scope">
+          <el-popconfirm title="确定删除吗？" @confirm="deleteProblem(scope.row.problemId)" v-if="user.role !== 'student'">
+            <template #reference>
+              <el-button size="mini" type="danger">删除</el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </el-table>
   </el-card>
-
   <div style="text-align: center">
     <el-pagination
         @size-change="handleSizeChange"
@@ -95,7 +122,7 @@
 import request from "@/utils/request";
 
 export default {
-  name: "ExamEditor",
+  name: "ProblemList",
   computed:{
     examId() {
       return this.$store.state.curExamId
@@ -118,7 +145,10 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
+      fileList: [],
+      uploadFileList: [],
       user: {},
+      checked: []
     }
   },
   created() {
@@ -127,16 +157,15 @@ export default {
     this.loadProblems();
   },
   methods:{
-    handout(){
-      request.post("/exam/handout",null,{params:{examId: this.examId}}).then( res => {
-        if(res.code === '0'){
+    getinpaper(){
+      request.post('/exam/paper/addProblems',this.ids,{params:{examId: this.examId}}).then(res => {
+        if(res.code==='0'){
           this.$message({
-            message: '考卷发布成功',
+            message: '题目成功导入试卷',
             type: 'success'
           })
-          this.$router.push('/exam')
         }
-        else{
+        else {
           this.$message({
             message: res.msg,
             type: 'error'
@@ -144,18 +173,20 @@ export default {
         }
       })
     },
+    handleSelectionChange(val) {
+      this.ids = val.map(v => v.problemId)   // [{id,name}, {id,name}] => [id,id]
+    },
     loadProblems() {
       this.loading = true
-      request.get("/exam/problems/exam",{//后端相关
+      request.get("/exam/problems/teacher",{//后端相关
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
-          examId: this.examId
         }}).then(res => {
-          this.problems = res.data.records
-          this.total = res.data.total
-          this.loading = false
-        })
+        this.problems = res.data.records
+        this.total = res.data.total
+        this.loading = false
+      })
     },
     submitForm(form) {
       this.$refs['form'].validate(valid => {
@@ -183,7 +214,7 @@ export default {
       })
     },
     deleteProblem(id) {
-      request.post("/exam/paper/delete" ,null,{params:{examId:this.examId,problemId:id}}).then(res => {
+      request.post("/exam/problems/delete" ,null,{params:{problemId: id}}).then(res => {
         this.$message({
           message: "删除成功",
           type: "success"
@@ -201,6 +232,42 @@ export default {
     handleCurrentChange(pageNum) {  // 改变当前页码触发
       this.currentPage = pageNum
       this.loadProblems()
+    },
+    httpRequest(param) {
+      console.log(param)
+      let fileObj = param.file // 相当于input里取得的files
+      let fd = new FormData()// FormData 对象
+      fd.append('file', fileObj)// 文件对象
+      fd.append('courseId', this.courseId)
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      request.post('/exam/problems/import', fd, config).then(res=>{
+        if (res.code === '0') {
+          this.$message({
+            type: "success",
+            message: "新增成功"
+          })
+          this.fileList=[]
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.load() // 刷新表格的数据
+      })
+    },
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      this.fileList=fileList
+    },
+    handlePreview(file) {
+      console.log(file)
     },
     problemBase(){
       this.$router.push('/ProblemList')

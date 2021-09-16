@@ -4,6 +4,7 @@ import com.xttdr.common.Result;
 import com.xttdr.entity.Statistic;
 import com.xttdr.service.CommentServiceImpl;
 import com.xttdr.service.CourseServiceImpl;
+import com.xttdr.service.ExamService;
 import com.xttdr.service.HomeworkServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,8 @@ public class StatisticController extends BaseController{
     CommentServiceImpl commentService;
     @Resource
     CourseServiceImpl courseService;
+    @Resource
+    ExamService examService;
     @GetMapping
     public Result<?> studyStatistic(){
         String id = getAccountId();
@@ -29,7 +32,8 @@ public class StatisticController extends BaseController{
         Integer homeworkSubmitCount = homeworkService.getSubmitCount(id);
         Integer commentCount = commentService.commentCount(id);
         Integer courseCount = courseService.courseCount(id);
-        Statistic statistic = new Statistic(homeworkAverageScore,homeworkAverageScore,homeworkSubmitCount,commentCount,courseCount);
+        Double examAverageScore = examService.getAverageScore(id);
+        Statistic statistic = new Statistic(homeworkAverageScore,examAverageScore,homeworkSubmitCount,commentCount,courseCount);
         return Result.success(statistic);
     }
     @GetMapping("/homework")

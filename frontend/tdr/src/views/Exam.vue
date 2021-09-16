@@ -3,14 +3,14 @@
   <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%; height: 55vh">
     <el-table-column prop="name" align="center" label="考试名" width="240"> </el-table-column>
     <el-table-column prop="courseId" align="center" label="考试课程" width="240"> </el-table-column>
-    <el-table-column prop="createdTime" align="center" label="开考时间" width="240" :formatter="dateFormat"> </el-table-column>
-    <el-table-column prop="lastTime" align="center" label="考试时长" width="90" > </el-table-column>
+    <el-table-column prop="begintime" align="center" label="开考时间" width="240" :formatter="dateFormat"> </el-table-column>
+    <el-table-column prop="lasttime" align="center" label="考试时长" width="90" > </el-table-column>
     <el-table-column prop="teacherId" align="center" label="创建者"> </el-table-column>
     <el-table-column align="center" label="操作">
       <template #default="scope">
         <el-button  type="primary" size="mini" @click="enterExam(scope.row)">考试</el-button>
         <el-button size="mini" v-if="user.userType !== 'student' " @click="editPaper(scope.row.examId)">编辑</el-button>
-        <el-button size="mini" v-if="user.userType !== 'student'" @click="findPaper(scope.row.examId)">结果</el-button>
+        <el-button size="mini" @click="getScore(scope.row.examId)">结果</el-button>
         <el-popconfirm title="确定删除吗？"  @confirm="handleDelete(scope.row.examId)" v-if="user.userType !== 'student'">
           <template #reference>
             <el-button  type="danger" size="mini">删除</el-button>
@@ -67,6 +67,9 @@
       </span>
     </template>
   </el-dialog>
+  <el-dialog title="考试结果" v-model="vis" width="10%">
+    <el-progress type="dashboard" :percentage="this.score" :color="colors"></el-progress>
+  </el-dialog>
 </template>
 
 <script>
@@ -77,6 +80,13 @@ export default {
   name: "Exam",
   data() {
     return {
+      colors: [
+        {color: '#f56c6c', percentage: 20},
+        {color: '#e6a23c', percentage: 40},
+        {color: '#5cb87a', percentage: 60},
+        {color: '#1989fa', percentage: 80},
+        {color: '#6f7ad3', percentage: 100}
+      ],
       options: [
         {
           value: 1,
@@ -96,6 +106,7 @@ export default {
         },
 
       ],
+      score: 0,
       fileList: [],
       uploadFileList: [],
       user: {},
@@ -111,6 +122,7 @@ export default {
       ids: [],
       isSelect: true,
       courseList:[],//这个是打算记录当前用户拥有课程的数组
+      vis: false
     }
   },
   created() {
@@ -124,6 +136,28 @@ export default {
     }
   },
   methods: {
+    getScore(id){
+      request.get('/exam/doExams/score',{params:{examId: id}}).then( res => {
+        this.score = res.data
+        if(res.code === '-1'){
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        else{
+          if(this.score === -1){
+            this.$message({
+              message: '您还未参与考试',
+              type: 'error'
+            })
+          }
+          else{
+            this.vis = true
+          }
+        }
+      })
+    },
     handleDelete(id){//删除考试
       request.post('/exam/delete/'+id).then(res => {
             if(res.code === '0'){
@@ -151,20 +185,38 @@ export default {
       })
     },
     enterExam(row){
-      this.$store.commit('setExamId',row.examId)
-      let start = row.createdTime;
-      let timeLength = row.lastTime;
-      let endingTime = start +timeLength*3600;
-      this.$router.push({
-        name: 'examPaper',
-        params: {
-          examId: row.examId,
-          endingTime:endingTime
+      request.get('/exam/doExams/score',{params:{examId: row.examId}}).then( res => {
+        this.score = res.data
+        if(res.code === '-1'){
+          this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+        else{
+          if(this.score !== -1){
+            this.$message({
+              message: '您已参与此考试',
+              type: 'error'
+            })
+          }
+          else{
+            this.$store.commit('setExamId',row.examId)
+            let begintime = row.begintime;
+            let lasttime = row.lasttime;
+            this.$router.push({
+              name: 'doExam',
+              params: {
+                examId: row.examId,
+                lasttime:lasttime,
+                begintime: begintime
+              }
+            })
+          }
         }
       })
     },
     save() {
-      console.log(this.form)
       request.post("/exam/add",this.form).then(res => {
         if (res.code === '0') {
           this.$message({
@@ -184,7 +236,7 @@ export default {
     load() {
       this.loading = true
       if(this.user.userType === 'student'){
-        request.get("/exam/doExams/all", {
+        request.get("/exam/examList", {
           params: {
             pageNum: this.currentPage,
             pageSize: this.pageSize,
@@ -193,6 +245,7 @@ export default {
           this.loading = false
           this.tableData = res.data.records
           this.total = res.data.total
+          console.log(this.tableData)
         })
       }
       else{
@@ -250,7 +303,6 @@ export default {
           (sec<10?'0'+sec:sec);
       return newTime;
     },
-
   }
 }
 </script>
