@@ -1,36 +1,11 @@
 <template>
   <el-button type="primary" @click="this.dialogVisible = true" style="margin-right: 10px">添加用户</el-button>
-  <el-upload
-      class="upload-demo"
-      ref="upload"
-      multiple
-      action=""
-      style="display:inline;"
-      :limit="1"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :http-request="httpRequest"
-      :file-list="fileList"
-      :auto-upload="false"
-  >
-    <template #trigger>
-      <el-button size="small" type="primary">选取文件</el-button>
-    </template>
-    <el-button
-        style="margin-left: 10px;"
-        size="small"
-        type="success"
-        @click="submitUpload"
-    >提交上传
-    </el-button>
-  </el-upload>
   <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
-    <el-table-column prop="id" label="用户ID" width="360"> </el-table-column>
-    <el-table-column prop="workId" label="工号" width="360"> </el-table-column>
+    <el-table-column prop="name" label="学院名称" width="360"> </el-table-column>
     <el-table-column prop="schoolId" label="学院编号"> </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
-        <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
+        <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.schoolId)">
           <template #reference>
             <el-button size="mini" type="danger">删除</el-button>
           </template>
@@ -50,15 +25,12 @@
     </el-pagination>
   </div>
 
-  <el-dialog title="添加用户" v-model="dialogVisible" width="30%">
+  <el-dialog title="添加学院" v-model="dialogVisible" width="30%">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="工号">
-        <el-input v-model="form.workId"></el-input>
-      </el-form-item>
       <el-form-item label="学院编号">
         <el-input v-model="form.schoolId"></el-input>
       </el-form-item>
-      <el-form-item label="姓名">
+      <el-form-item label="学院名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-button type="primary" @click="handleadd">立即创建</el-button>
@@ -102,43 +74,8 @@ export default {
   computed: {
   },
   methods: {
-    httpRequest(param) {
-      console.log(param)
-      let fileObj = param.file
-      let fd = new FormData()
-      fd.append('file', fileObj)
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-      request.post('/manage/import', fd, config).then(res=>{
-        if (res.code === '0') {
-          this.$message({
-            type: "success",
-            message: "导入成功"
-          })
-          this.load()
-          this.fileList=[]
-        } else {
-          this.$message({
-            type: "error",
-            message: res.msg
-          })
-        }
-      })
-    },
-    submitUpload() {
-      this.$refs.upload.submit()
-    },
-    handleRemove(file, fileList) {
-      this.fileList=fileList
-    },
-    handlePreview(file) {
-      console.log(file)
-    },
     handleadd(){
-      request.post('/manage/add',null,{params:{schoolId:this.form.schoolId, workId: this.form.workId, name:this.form.name}}).then(res => {
+      request.post('/manage/school/add',null,{params:{schoolId:this.form.schoolId, workId: this.form.workId, name:this.form.name}}).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",
@@ -155,7 +92,7 @@ export default {
       })
     },
     handleDelete(id){
-      request.post('/manage/delete/'+id).then(res => {
+      request.post('/manage/school/delete/'+id).then(res => {
             if(res.code === '0'){
               this.$message({
                 type: "success",
@@ -172,7 +109,7 @@ export default {
     },
     load() {
       this.loading = true
-      request.get("/manage/all",{
+      request.get("/manage/school/all",{
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,

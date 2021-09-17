@@ -37,6 +37,9 @@
         <el-menu-item-group>
           <el-menu-item index="/manage">人员管理</el-menu-item>
         </el-menu-item-group>
+        <el-menu-item-group>
+          <el-menu-item index="/school">学院管理</el-menu-item>
+        </el-menu-item-group>
       </el-sub-menu>
     </el-menu>
   </el-aside>
