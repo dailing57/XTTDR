@@ -104,7 +104,6 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      filesUploadUrl: "http://localhost:9090/homework/submit",
       ids: [],
       vis: false,
       detail: {}
@@ -141,13 +140,12 @@ export default {
       fd.append('file', fileObj)// 文件对象
       fd.append('homeworkId', this.detail.homeworkId)
       fd.append('studentId',this.user.id)
-      let url = this.filesUploadUrl
       let config = {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }
-      request.post(url, fd, config).then(res=>{
+      request.post('/homework/submit', fd, config).then(res=>{
         if (res.code === '0') {
           this.$message({
             type: "success",

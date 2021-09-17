@@ -71,7 +71,6 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      filesUploadUrl: "http://localhost:9090/courseMaterial/add",
       ids: []
     }
   },
@@ -92,13 +91,12 @@ export default {
       let fd = new FormData()// FormData 对象
       fd.append('file', fileObj)// 文件对象
       fd.append('courseId', this.courseId)
-      let url = this.filesUploadUrl
       let config = {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }
-      request.post(url, fd, config).then(res=>{
+      request.post('/courseMaterial/add', fd, config).then(res=>{
         if (res.code === '0') {
           this.$message({
             type: "success",

@@ -118,7 +118,6 @@ export default {
       pageSize: 10,
       total: 0,
       tableData: [],
-      filesUploadUrl: "http://localhost:9090/exam/add",//后端内容
       ids: [],
       isSelect: true,
       courseList:[],//这个是打算记录当前用户拥有课程的数组
