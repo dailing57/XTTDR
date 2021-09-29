@@ -1,4 +1,5 @@
 <template>
+  <el-button  icon="el-icon-back" @click="backToAll()" >作业列表</el-button>
   <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
     <el-table-column prop="id" label="学生编号" width="360"> </el-table-column>
     <el-table-column label="操作">
@@ -103,11 +104,13 @@ export default {
     })},
     load() {
       this.loading = true
+      console.log("HOMEWORKID:"+this.homeworkId)
       request.get("/homework/submittedHomework",{
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
-          homeworkId: this.homeworkId
+          homeworkId: this.homeworkId,
+
         }
       }).then(res => {
         this.loading = false
@@ -122,7 +125,13 @@ export default {
     handleCurrentChange(pageNum) {  // 改变当前页码触发
       this.currentPage = pageNum
       this.load()
-    }
+    },
+    backToAll(){
+      this.$router.push({
+        name: '/coursePage/homework',
+
+      })
+    },
   }
 }
 </script>

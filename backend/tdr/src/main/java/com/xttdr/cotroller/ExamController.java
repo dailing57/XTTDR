@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -201,7 +202,7 @@ public class ExamController extends BaseController{
     //做考试相关
     @PostMapping("/handout")
     public Result<?> handOutExam(@RequestParam String examId){
-        return examService.handOutExam(examId);
+        return examService.handOutExam(examId,getUser());
     }
 
     @GetMapping("/doExams/all")
@@ -228,6 +229,23 @@ public class ExamController extends BaseController{
         doExam.setExamId(examId);
         doExam.setId(getAccountId());
         return examService.scoreExam(doExam, answer);
+    }
+    @GetMapping("/doExams/statistic")
+    public Result<?> getStatisticByExamId(@RequestParam String examId){
+        System.out.println("************************************toooooo"+examId);
+        Double avgScore = examService.getAverageScore(examId);
+        Double maxScore = examService.getMaxScore(examId);
+        Double minScore = examService.getMinScore(examId);
+        Double attendance = examService.getAttendance(examId);
+        List<Double> statisticList = Arrays.asList(
+                avgScore==null?0:avgScore,
+                maxScore==null?0:maxScore.doubleValue(),
+                minScore==null?0:minScore.doubleValue(),
+                attendance==null?0:attendance);
+
+
+        System.out.println("return:::"+statisticList.toString());
+        return Result.success(statisticList);
     }
 }
 

@@ -26,9 +26,21 @@
         from paper a left join problem b on a.problem_id = b.problem_id
         where exam_id = #{examId}
     </select>
-    <select id="getAverageScore" resultType="Double">
-        select avg(score)
-        from doexam
-        where id = #{id}
+    <select id="getAvgScore" resultType="Double">
+        select AVG(score) from tdr.doexam
+        where EXAM_ID = #{id} AND SCORE >= 0
+    </select>
+    <select id="getMaxScore" resultType="Double">
+        select MAX(score) from tdr.doexam
+        where EXAM_ID = #{id} AND SCORE >= 0
+    </select>
+    <select id="getMinScore" resultType="Double">
+        select MIN(score) from tdr.doexam
+        where EXAM_ID = #{id} AND SCORE >= 0
+    </select>
+    <select id="getAttendance" resultType="Double">
+        select count(case when SCORE>=0 then 1 end)
+        from tdr.doexam
+        where EXAM_ID = #{id}
     </select>
 </mapper>

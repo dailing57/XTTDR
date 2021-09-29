@@ -1,9 +1,9 @@
 <template>
-  <el-button type="primary" @click="this.dialogVisible = true" style="margin-right: 10px">添加用户</el-button>
+  <el-button type="primary" @click="this.dialogVisible = true" style="margin-right: 10px">添加学院</el-button>
   <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
     <el-table-column prop="name" label="学院名称" width="360"> </el-table-column>
-    <el-table-column prop="schoolId" label="学院编号"> </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column prop="schoolId"  align="center" label="学院编号"> </el-table-column>
+    <el-table-column  align="center"  label="操作">
       <template #default="scope">
         <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.schoolId)">
           <template #reference>

@@ -63,7 +63,7 @@ public class FileController extends BaseController{
         return json;  // 返回结果 url
     }
     @PostMapping("/avatar")
-    public Result<?> addCourseMaterial(HttpServletRequest request) throws IOException {
+    public Result<?> updateUserAvatar(HttpServletRequest request) throws IOException {
         MultipartHttpServletRequest params = ((MultipartHttpServletRequest) request);
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         String path = "";

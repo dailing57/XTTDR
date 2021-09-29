@@ -3,24 +3,25 @@
     <el-card v-loading="this.loading">
       <div style="padding: 20px; color: #888">
         <div>
-          <el-input type="textarea" :rows="3" v-model="entity.content"></el-input>
+          发表评论<el-input type="textarea" :rows="3" v-model="entity.content"></el-input>
           <div style="text-align: right; padding: 10px"><el-button type="primary" @click="save">发表</el-button></div>
         </div>
       </div>
 
       <div style="display: flex; padding: 20px" v-for="item in comments">
         <div style="text-align: center; flex: 1">
-          <el-image :src="item.avatar" style="width: 60px; height: 60px; border-radius: 50%"></el-image>
+          <el-avatar  :src="item.avatar" class="avatar" :size="80" shape="circle"/>
         </div>
-        <div style="padding: 0 10px; flex: 5">
+        <div style="padding: 0 5px; flex: 5">
           <div><b style="font-size: 14px">{{ item.id }}</b></div>
           <div style="padding: 10px 0; color: #888">
             {{ item.content }}
             <el-button type="text" size="mini" @click="del(item.commentId)" v-if="item.id === user.id">删除</el-button>
           </div>
-          <div style="background-color: #eee; padding: 10px" v-if="item.parentComment">{{ item.parentComment.id }}：{{ item.parentComment.content }}</div>
-          <div style="color: #888; font-size: 12px">
-            <span>{{ item.createdTime  }}</span>
+          <div style="background-color: #eee; padding: 10px" v-if="item.parentComment">{{ item.parentComment.id }}：“{{ item.parentComment.content }}”</div>
+
+          <div style="color: #888; font-size: 12px" >
+            <span>{{ dateFormat(item.createdTime)  }}</span>
             <el-button type="text" style="margin-left: 20px" @click="reReply(item.commentId)">回复</el-button>
           </div>
         </div>
@@ -155,7 +156,23 @@ export default {
         });
         this.loadComment()
       })
-    }
+    },
+    dateFormat(createdTime){
+      var t=new Date(createdTime);//row 表示一行数据, updateTime 表示要格式化的字段名称
+      var year=t.getFullYear(),
+          month=t.getMonth()+1,
+          day=t.getDate(),
+          hour=t.getHours(),
+          min=t.getMinutes(),
+          sec=t.getSeconds();
+      var newTime=year+'-'+
+          (month<10?'0'+month:month)+'-'+
+          (day<10?'0'+day:day)+' '+
+          (hour<10?'0'+hour:hour)+':'+
+          (min<10?'0'+min:min)+':'+
+          (sec<10?'0'+sec:sec);
+      return newTime;
+    },
   }
 }
 </script>

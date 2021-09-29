@@ -30,7 +30,30 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public Double getAverageScore(String id) {
-        return doExamMapper.getAverageScore(id);
+        return doExamMapper.getAvgScore(id);
+    }
+
+    @Override
+    public Double getMaxScore(String examId) {
+        return doExamMapper.getMaxScore(examId);
+    }
+
+    @Override
+    public Double getMinScore(String examId) {
+        return doExamMapper.getMinScore(examId);
+    }
+
+
+    @Override
+    public Double getAttendance(String examId) {
+        Double res = doExamMapper.getAttendance(examId);
+        QueryWrapper<DoExam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("EXAM_ID",examId);
+        Double cnt = Double.valueOf(doExamMapper.selectCount(queryWrapper));
+        if(cnt != 0.0){
+            return res/cnt;
+        }
+        return 0.0;
     }
 
     @Override
@@ -38,6 +61,7 @@ public class ExamServiceImpl implements ExamService {
         QueryWrapper<DoExam> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("exam_id",examId).eq("id",id);
         DoExam doExam = doExamMapper.selectOne(queryWrapper);
+
         if(doExam==null)
             return Result.error("-1","考试未发布");
         return Result.success(doExam.getScore());
@@ -81,12 +105,14 @@ public class ExamServiceImpl implements ExamService {
     @SuppressWarnings("unchecked")
     @Override
     public Result<?> scoreExam(DoExam doExam, List<String> answer) {
+        System.out.println(answer);
         List<String> correct = doExamMapper.getAnswer(doExam.getExamId());
         double score = 0.0;
+        double oneProblem = 100.0/answer.size();
         for(int i = 0; i < answer.size(); i++)
             if(answer.get(i).equals(correct.get(i)))
                 score++;
-        doExam.setScore(score*10.0);
+        doExam.setScore(score*oneProblem);
         QueryWrapper<DoExam> queryWrapper = new QueryWrapper<DoExam>().eq("exam_id", doExam.getExamId()).eq("id",doExam.getId());
         if(doExamMapper.update(doExam, queryWrapper) > 0)
             return Result.success();
@@ -122,14 +148,19 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Result<?> handOutExam(Exam exam) {
-        return handOutExam(exam.getExamId());
+    public Result<?> handOutExam(Exam exam,Account account) {
+        return handOutExam(exam.getExamId(),account);
     }
 
     @Override
-    public Result<?> handOutExam(String examId) {
+    public Result<?> handOutExam(String examId,Account account) {
         String courseId = ((Exam) getExamById(examId).getData()).getCourseId();
-        List<DoCourse> students = (List<DoCourse>) courseService.getStudentList(courseId).getData();
+        List<DoCourse> students = (List<DoCourse>) courseService.getStudentList(courseId,account).getData();
+        QueryWrapper<DoExam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("exam_id",examId);
+        if(doExamMapper.selectList(queryWrapper).size() != 0){
+            return Result.error("-1","考试已经发布");
+        }
         for(DoCourse student : students){
             doExamMapper.insert(new DoExam(examId, student.getStudentId(), -1.0));
         }

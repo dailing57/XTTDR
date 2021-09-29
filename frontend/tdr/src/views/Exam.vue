@@ -8,8 +8,8 @@
     <el-table-column prop="teacherId" align="center" label="创建者"> </el-table-column>
     <el-table-column align="center" label="操作">
       <template #default="scope">
-        <el-button  type="primary" size="mini" @click="enterExam(scope.row)">考试</el-button>
-        <el-button size="mini" v-if="user.userType !== 'student' " @click="editPaper(scope.row.examId)">编辑</el-button>
+        <el-button  type="primary" v-if="user.userType == 'student' " size="mini" @click="enterExam(scope.row)">考试</el-button>
+        <el-button size="mini" type="primary"  v-if="user.userType !== 'student'" @click="editPaper(scope.row)">编辑</el-button>
         <el-button size="mini" @click="getScore(scope.row.examId)">结果</el-button>
         <el-popconfirm title="确定删除吗？"  @confirm="handleDelete(scope.row.examId)" v-if="user.userType !== 'student'">
           <template #reference>
@@ -70,6 +70,18 @@
   <el-dialog title="考试结果" v-model="vis" width="10%">
     <el-progress type="dashboard" :percentage="this.score" :color="colors"></el-progress>
   </el-dialog>
+  <el-dialog title="考试结果" v-model="vis_2" width="10.5%">
+
+    <el-tag  style="display: block;" >最高分 {{this.maxScore}}</el-tag>
+    <el-tag  style="display: block;">最低分 {{this.minScore}}</el-tag>
+    <el-tag  style="display: block; ">平均分 {{this.avgScore}}</el-tag>
+    <el-progress style="margin-top: 20px" type="dashboard" :percentage="this.attendance*100" :color="colors" >
+      <template #default="{ percentage }">
+        <span class="percentage-value">{{ this.attendance*100 }}%</span>
+        <span class="percentage-label">完成率</span>
+      </template>
+    </el-progress>
+  </el-dialog>
 </template>
 
 <script>
@@ -121,7 +133,13 @@ export default {
       ids: [],
       isSelect: true,
       courseList:[],//这个是打算记录当前用户拥有课程的数组
-      vis: false
+      vis: false,
+      vis_2:false,
+      avgScore:0,
+      minScore:0,
+      maxScore:0,
+      attendance:0,
+      curTime:0,
     }
   },
   created() {
@@ -136,26 +154,49 @@ export default {
   },
   methods: {
     getScore(id){
-      request.get('/exam/doExams/score',{params:{examId: id}}).then( res => {
-        this.score = res.data
-        if(res.code === '-1'){
-          this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-        else{
-          if(this.score === -1){
+      if(this.user.userType=='student'){
+        request.get('/exam/doExams/score',{params:{examId: id}}).then( res => {
+          this.score = res.data
+          if(res.code === '-1'){
             this.$message({
-              message: '您还未参与考试',
+              message: res.msg,
               type: 'error'
             })
           }
           else{
-            this.vis = true
+            if(this.score === -1){
+              this.$message({
+                message: '您还未参与考试',
+                type: 'error'
+              })
+            }
+            else{
+              this.vis = true
+            }
           }
-        }
-      })
+        })
+      }
+      else{
+        //老师查看
+        request.get('/exam/doExams/statistic',{params:{examId: id}}).then( res => {
+          console.log(res.data)
+          this.avgScore=res.data[0]
+          this.minScore=res.data[1]
+          this.maxScore=res.data[2]
+          this.attendance=res.data[3]
+          if(res.code === '-1'){
+            this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+          else{
+              this.vis_2 = true
+
+          }
+        })
+      }
+
     },
     handleDelete(id){//删除考试
       request.post('/exam/delete/'+id).then(res => {
@@ -173,13 +214,21 @@ export default {
           }
       )
     },
-    editPaper(examId){
-      console.log(examId)
-      this.$store.commit('setExamId',examId)
+    editPaper(row){
+      let begin =  Date.parse(row.begintime)
+      let cur = ((new Date() - begin) / 1000)
+      if(cur>0){
+        this.$message({
+          message: "考试已开始，不能编辑试卷",
+          type: 'error'
+        })
+        return
+      }
+      this.$store.commit('setExamId',row.examId)
       this.$router.push({
         name: 'editExam',
         params: {
-          examId: examId
+          examId: row.examId
         }
       })
     },
@@ -200,6 +249,15 @@ export default {
             })
           }
           else{
+            let begin =  Date.parse(row.begintime)
+            let cur = ((new Date() - begin) / 1000)
+            if(cur<0){
+              this.$message({
+                message: "考试未开始，不能进入考试",
+                type: 'error'
+              })
+              return
+            }
             this.$store.commit('setExamId',row.examId)
             let begintime = row.begintime;
             let lasttime = row.lasttime;
@@ -271,7 +329,7 @@ export default {
       this.load()
     },
     dateFormat(row,column){
-      var t=new Date(row.createdTime);//row 表示一行数据, updateTime 表示要格式化的字段名称
+      var t=new Date(row.begintime);//row 表示一行数据, updateTime 表示要格式化的字段名称
       var year=t.getFullYear(),
           month=t.getMonth()+1,
           day=t.getDate(),
@@ -286,26 +344,21 @@ export default {
           (sec<10?'0'+sec:sec);
       return newTime;
     },
-    dateFormat2(curTime){
-      var t=new Date(curTime);//row 表示一行数据, updateTime 表示要格式化的字段名称
-      var year=t.getFullYear(),
-          month=t.getMonth()+1,
-          day=t.getDate(),
-          hour=t.getHours(),
-          min=t.getMinutes(),
-          sec=t.getSeconds();
-      var newTime=year+'-'+
-          (month<10?'0'+month:month)+'-'+
-          (day<10?'0'+day:day)+' '+
-          (hour<10?'0'+hour:hour)+':'+
-          (min<10?'0'+min:min)+':'+
-          (sec<10?'0'+sec:sec);
-      return newTime;
-    },
+
   }
 }
 </script>
 
 <style scoped>
+.percentage-value {
+  display: block;
+  margin-top: 10px;
+  font-size: 28px;
+}
 
+.percentage-label {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+}
 </style>

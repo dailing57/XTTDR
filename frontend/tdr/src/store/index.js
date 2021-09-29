@@ -15,11 +15,12 @@ export default createStore({
       state.curCourseId=courseId
     },
     setHomeworkId(state,homeworkId){
-      state.curHomeworkId = homeworkId
+      state.curHomeworkId=homeworkId
     },
     setExamId(state,examId){
       state.curExamId=examId
-    }
+    },
+
   },
   actions: {
     SET_USER({commit}, user) {

@@ -2,8 +2,10 @@ package com.xttdr.cotroller;
 
 import cn.hutool.core.util.IdUtil;
 import com.xttdr.common.Result;
+import com.xttdr.entity.Account;
 import com.xttdr.entity.Course;
 import com.xttdr.entity.DoCourse;
+import com.xttdr.entity.User;
 import com.xttdr.mapper.DoCourseMapper;
 import com.xttdr.service.CourseServiceImpl;
 import org.apache.ibatis.annotations.Results;
@@ -38,7 +40,7 @@ public class CourseController extends BaseController{
 
     @GetMapping("/studentList")
     public Result<?> getStudentList(@RequestParam String courseId){
-        return courseService.getStudentList(courseId);
+        return courseService.getStudentList(courseId,getUser());
     }
 
     @PostMapping("/deleteStudent")

@@ -1,25 +1,28 @@
 <template>
   <div class="course-page">
+
     <el-row :gutter="0">
-      <el-col :span="6"><el-button type="primary" @click="add">加入课程</el-button></el-col>
-      <el-col :span="6"><el-button type="primary" @click="this.vis = true">添加课程</el-button></el-col>
-      <el-col :span="12">
+      <el-col :span="4"><el-button type="primary" @click="add">加入课程</el-button>
+        <el-button type="primary" v-if="user.userType!=='student'" @click="this.vis = true">新建课程</el-button></el-col>
+
+      <el-col :span="20">
         <div style="margin: 10px 0">
-          <el-input v-model="search" placeholder="请输入关键字" style="width: 20%" clearable></el-input>
-          <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
+          <el-input v-model="search" placeholder="请输入关键字" style="width: 30%" clearable></el-input>
+          <el-button type="primary" style="margin-left: 5px" @click="load">查询课程</el-button>
         </div>
       </el-col>
     </el-row>
-    <div class="course-card" v-loading="loading">
+    <div class="course-card" v-loading="loading" style="height: 60vh">
       <el-card  class="box-card" v-for="it in tableData">
         <div class="course-back">
           <img src="@/assets/img/course.svg" alt=""/>
         </div>
         <div class="course-bottom">
-          <span style="position: absolute;left: 0">{{it.name}}</span>
+          <span style="position: absolute;left: 0">{{it.name}} : {{it.teacherId}}</span>
           <el-button type="primary" class="enter" @click="enterCourse(it.courseId)">进入课程</el-button>
         </div>
       </el-card>
+
     </div>
     <el-pagination style="margin-top: 50px"
                    @size-change="handleSizeChange"
@@ -28,7 +31,7 @@
                    :page-sizes="[3, 6, 9]"
                    :page-size="pageSize"
                    layout="total, sizes, prev, pager, next, jumper"
-                   :total="total">
+                   :total="total" >
     </el-pagination>
   </div>
 
@@ -45,7 +48,6 @@
       </span>
     </template>
   </el-dialog>
-
   <el-dialog title="添加课程" v-model="this.vis" width="30%">
     <el-form label-width="120px">
       <el-form-item label="课程名称">
@@ -59,7 +61,6 @@
       </span>
     </template>
   </el-dialog>
-
 </template>
 
 <script>
@@ -69,24 +70,26 @@ export default {
   name: "Course",
   data() {
     return {
-      vis: false,
       user: {},
       loading: true,
       form: {},
       dialogVisible: false,
+      vis: false,
       search: '',
       currentPage: 1,
       pageSize: 6,
       total: 0,
       tableData: [],
       addStudyId: '',
-      courseName: '',
-      ids: []
+      // filesUploadUrl: "http://" + window.server.filesUploadUrl + ":9090/files/upload",
+      ids: [],
+     courseName: '',
     }
   },
   created() {
     let userStr = sessionStorage.getItem("user") || "{}"
     this.user = JSON.parse(userStr)
+
     this.load()
   },
   methods: {
@@ -127,10 +130,6 @@ export default {
         this.dialogVisible = false  // 关闭弹窗
       })
     },
-    enterCourse(courseId){
-      this.$store.commit('setCourseId',courseId)
-      this.$router.push('/coursePage')
-    },
     saveCourse(){
       request.post("/course/add", null,{params: {
           name: this.courseName
@@ -151,6 +150,10 @@ export default {
         this.vis = false  // 关闭弹窗
       })
     },
+    enterCourse(courseId){
+      this.$store.commit('setCourseId',courseId)
+      this.$router.push('/coursePage')
+    },
     handleSizeChange(pageSize) {   // 改变当前每页的个数触发
       this.pageSize = pageSize
       this.load()
@@ -164,6 +167,12 @@ export default {
 </script>
 
 <style scoped>
+@import '../assets/css/style.css';
+div >>> {
+  font-family: "ok";
+
+}
+
 .course-page{
   text-align: center;
 }
@@ -175,7 +184,7 @@ export default {
   margin-top: 20px;
 }
 .course-back{
-  background-color: deepskyblue;
+  background-color: #9289cb;
   margin: 0;
   width: 100%;
 }
@@ -184,12 +193,15 @@ export default {
   margin-top: 5px;
 }
 .box-card {
-  width: 400px;
+  width: 350px;
   height: 200px;
   margin: 20px;
 }
 .enter{
   position: absolute;
   right: 0;
+}
+.el-form-item{
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 </style>

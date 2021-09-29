@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80023
 File Encoding         : 65001
 
-Date: 2021-09-17 11:24:27
+Date: 2021-09-29 22:25:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,9 +31,8 @@ CREATE TABLE `account` (
 -- ----------------------------
 INSERT INTO `account` VALUES ('admin', 'random', 'admin');
 INSERT INTO `account` VALUES ('student', 'random', 'student');
-INSERT INTO `account` VALUES ('student1', 'random', 'student');
 INSERT INTO `account` VALUES ('teacher', 'random', 'teacher');
-INSERT INTO `account` VALUES ('xxx', 'xxx', 'teacher');
+INSERT INTO `account` VALUES ('XUESHENG', '123456', 'student');
 
 -- ----------------------------
 -- Table structure for comment
@@ -57,12 +56,6 @@ CREATE TABLE `comment` (
 -- ----------------------------
 -- Records of comment
 -- ----------------------------
-INSERT INTO `comment` VALUES ('3c592910d39a4fb79ef3d6908cf9998e', '啦啦啦', 'teacher', '2021-09-13 12:43:06', '1', null);
-INSERT INTO `comment` VALUES ('4e1abc294bb34eba803ade47580f7ca2', '同学讲一讲哈哈哈', 'teacher', '2021-09-13 21:23:38', '1', null);
-INSERT INTO `comment` VALUES ('6d931433f013455583d9f328da6ffdd7', '老师好', 'student', '2021-09-14 07:40:09', '1', '4e1abc294bb34eba803ade47580f7ca2');
-INSERT INTO `comment` VALUES ('c503fb38f97944348d4596c28d420fad', '耶耶耶', 'teacher', '2021-09-13 12:43:11', '1', null);
-INSERT INTO `comment` VALUES ('ca2a7d22698e428a9c629b6a46e40243', '好耶', 'student', '2021-09-14 07:57:02', '1', null);
-INSERT INTO `comment` VALUES ('f689ad03992344a59f19e4fa8c987132', '耶耶耶', 'teacher', '2021-09-13 21:23:44', '1', '4e1abc294bb34eba803ade47580f7ca2');
 
 -- ----------------------------
 -- Table structure for course
@@ -82,12 +75,8 @@ CREATE TABLE `course` (
 -- ----------------------------
 -- Records of course
 -- ----------------------------
+INSERT INTO `course` VALUES ('095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', 'new', 'teacher', '2021-09-29 21:13:05');
 INSERT INTO `course` VALUES ('1', '课程1', 'teacher', '2021-09-04 14:55:35');
-INSERT INTO `course` VALUES ('2', '课程2', 'teacher', '2021-09-04 15:33:59');
-INSERT INTO `course` VALUES ('3969c962161c47f59596a84c32bd2cf8', 'kk', 'teacher', '2021-09-13 22:09:53');
-INSERT INTO `course` VALUES ('4389307617a54b489799e3902a84e2af', '云计算', 'teacher', '2021-09-14 11:33:22');
-INSERT INTO `course` VALUES ('f601433079d44ee6bc266b5420a021ce', '算法设计', 'teacher', '2021-09-14 15:33:48');
-INSERT INTO `course` VALUES ('f84afc1149864548a86284cb318cdb3a', '计算机网络', 'teacher', '2021-09-13 21:00:25');
 
 -- ----------------------------
 -- Table structure for course_material
@@ -112,7 +101,8 @@ CREATE TABLE `course_material` (
 -- ----------------------------
 -- Records of course_material
 -- ----------------------------
-INSERT INTO `course_material` VALUES ('oakCenter1.png', '1oakCenter1.png', '1', 'H:\\课设一\\TDR\\xttdr\\backend\\tdr/files/1oakCenter1.png', 'teacher', '2021-09-11 10:55:28');
+INSERT INTO `course_material` VALUES ('学生表.xlsx', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2学生表.xlsx', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', 'I:\\QQ临时文件\\2376593337\\FileRecv\\XTTDR\\backend\\tdr/files/095a0d0d5d8b4eb18d6f2cfb1fe2c1e2学生表.xlsx', 'teacher', '2021-09-29 21:16:06');
+INSERT INTO `course_material` VALUES ('计算机网络测验.xlsx', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2计算机网络测验.xlsx', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', 'I:\\QQ临时文件\\2376593337\\FileRecv\\XTTDR\\backend\\tdr/files/095a0d0d5d8b4eb18d6f2cfb1fe2c1e2计算机网络测验.xlsx', 'teacher', '2021-09-29 21:16:06');
 
 -- ----------------------------
 -- Table structure for docourse
@@ -132,13 +122,8 @@ CREATE TABLE `docourse` (
 -- ----------------------------
 -- Records of docourse
 -- ----------------------------
-INSERT INTO `docourse` VALUES ('2', 'teacher');
-INSERT INTO `docourse` VALUES ('1', 'teacher');
-INSERT INTO `docourse` VALUES ('f84afc1149864548a86284cb318cdb3a', 'teacher');
-INSERT INTO `docourse` VALUES ('3969c962161c47f59596a84c32bd2cf8', 'teacher');
-INSERT INTO `docourse` VALUES ('1', 'student');
-INSERT INTO `docourse` VALUES ('4389307617a54b489799e3902a84e2af', 'teacher');
-INSERT INTO `docourse` VALUES ('f601433079d44ee6bc266b5420a021ce', 'teacher');
+INSERT INTO `docourse` VALUES ('095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', 'teacher');
+INSERT INTO `docourse` VALUES ('095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', 'XUESHENG');
 
 -- ----------------------------
 -- Table structure for doexam
@@ -155,10 +140,7 @@ CREATE TABLE `doexam` (
 -- ----------------------------
 -- Records of doexam
 -- ----------------------------
-INSERT INTO `doexam` VALUES ('aafbda09b0e44a65a63947405b85bbe3', 'teacher', '10.00');
-INSERT INTO `doexam` VALUES ('aafbda09b0e44a65a63947405b85bbe3', 'student', '10.00');
-INSERT INTO `doexam` VALUES ('df6b12024a1348c6b26b1d33638ac627', 'teacher', '20.00');
-INSERT INTO `doexam` VALUES ('df6b12024a1348c6b26b1d33638ac627', 'student', '-1.00');
+INSERT INTO `doexam` VALUES ('f03ec6be96284411aff08788b9e747cf', 'XUESHENG', '100.00');
 
 -- ----------------------------
 -- Table structure for dohomework
@@ -179,7 +161,7 @@ CREATE TABLE `dohomework` (
 -- ----------------------------
 -- Records of dohomework
 -- ----------------------------
-INSERT INTO `dohomework` VALUES ('4942af3382c7451891f693ea11d91924', 'teacher', '6e5771ee3a5e4878ad3bcd424f24c89doakCenter1.png', '4.000000');
+INSERT INTO `dohomework` VALUES ('a9e4e25c80a84bbca84f79588c6eeb94', 'XUESHENG', '0b77035575334bc2814d61cf8a94aab3XUESHENG课设.docx', '5.000000');
 
 -- ----------------------------
 -- Table structure for exam
@@ -205,9 +187,7 @@ CREATE TABLE `exam` (
 -- ----------------------------
 -- Records of exam
 -- ----------------------------
-INSERT INTO `exam` VALUES ('28fbb66181ca4fcfb1488f5656edbdbf', '1', '1', '2021-09-15 16:27:11', 'teacher', '2021-09-15 16:27:09', '1');
-INSERT INTO `exam` VALUES ('aafbda09b0e44a65a63947405b85bbe3', '阿斯蒂芬', '1', '2021-09-16 09:27:25', 'teacher', '2021-09-16 09:27:16', '2.5');
-INSERT INTO `exam` VALUES ('df6b12024a1348c6b26b1d33638ac627', 'sdaf', '1', '2021-09-16 23:27:48', 'teacher', '2021-09-16 23:27:45', '2.5');
+INSERT INTO `exam` VALUES ('f03ec6be96284411aff08788b9e747cf', 'test1', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', '2021-09-29 21:52:40', 'teacher', '2021-09-29 21:53:35', '1');
 
 -- ----------------------------
 -- Table structure for homework
@@ -233,9 +213,7 @@ CREATE TABLE `homework` (
 -- ----------------------------
 -- Records of homework
 -- ----------------------------
-INSERT INTO `homework` VALUES ('1', '作业测试1', 'teacher', '2021-09-09 20:04:29', '2021-09-10 20:04:32', '耶耶耶', '1');
-INSERT INTO `homework` VALUES ('3', '作业测试3', 'teacher', '2021-09-09 20:04:29', '2021-09-10 20:04:32', '耶耶耶', '2');
-INSERT INTO `homework` VALUES ('4942af3382c7451891f693ea11d91924', '测试作业2', 'teacher', '2021-09-11 08:00:00', '2021-09-12 08:00:00', '<p>嘿嘿嘿咕咕咕</p>', '1');
+INSERT INTO `homework` VALUES ('a9e4e25c80a84bbca84f79588c6eeb94', '作业1', 'teacher', '2021-09-29 08:00:00', '2021-10-01 08:00:00', '<p>请提交课设报告！！</p>', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2');
 
 -- ----------------------------
 -- Table structure for paper
@@ -254,16 +232,13 @@ CREATE TABLE `paper` (
 -- ----------------------------
 -- Records of paper
 -- ----------------------------
-INSERT INTO `paper` VALUES ('28fbb66181ca4fcfb1488f5656edbdbf', 'eb7edd54b6f448148e26ec70d5c61d6f');
-INSERT INTO `paper` VALUES ('28fbb66181ca4fcfb1488f5656edbdbf', '0ea2eea138714a2cb345e76c4c8bc463');
-INSERT INTO `paper` VALUES ('aafbda09b0e44a65a63947405b85bbe3', '90d77c1f940f42a8b53c206e0b93768f');
-INSERT INTO `paper` VALUES ('aafbda09b0e44a65a63947405b85bbe3', '443d076cad754f8cae8645b6e13d8de5');
-INSERT INTO `paper` VALUES ('aafbda09b0e44a65a63947405b85bbe3', '0ea2eea138714a2cb345e76c4c8bc463');
-INSERT INTO `paper` VALUES ('aafbda09b0e44a65a63947405b85bbe3', '28cb9b50df324473b0e263048d20c809');
-INSERT INTO `paper` VALUES ('df6b12024a1348c6b26b1d33638ac627', '0ea2eea138714a2cb345e76c4c8bc463');
-INSERT INTO `paper` VALUES ('df6b12024a1348c6b26b1d33638ac627', '28cb9b50df324473b0e263048d20c809');
-INSERT INTO `paper` VALUES ('df6b12024a1348c6b26b1d33638ac627', '406824faa39b40aeb5bcb759861b94be');
-INSERT INTO `paper` VALUES ('df6b12024a1348c6b26b1d33638ac627', '443d076cad754f8cae8645b6e13d8de5');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', '9a4919826d4d4358b5db96fe81511973');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', '3e3b58d740124000ba01b31e700c4d07');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', '5690c7e8f58a4a56b5979d616fb336e4');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', '7ab64b0fa6404cf48cc57e65ba5d521e');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', '9c52769c22b14570a846e6373a4b1d19');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', 'e7f1f789efc94c4fad2513d1ceab3062');
+INSERT INTO `paper` VALUES ('f03ec6be96284411aff08788b9e747cf', 'f5a8617125f3477c964cc10f7236d6f9');
 
 -- ----------------------------
 -- Table structure for problem
@@ -288,16 +263,13 @@ CREATE TABLE `problem` (
 -- ----------------------------
 -- Records of problem
 -- ----------------------------
-INSERT INTO `problem` VALUES ('0ea2eea138714a2cb345e76c4c8bc463', 'dsf', 'teacher', '2021-09-15 22:44:25', 'as', 'f', 'b', 'd', 'A', 'saf');
-INSERT INTO `problem` VALUES ('28cb9b50df324473b0e263048d20c809', '1+1=?', 'teacher', '2021-09-16 20:10:12', '1', '2', '3', '4', 'D', '1+1=4');
-INSERT INTO `problem` VALUES ('406824faa39b40aeb5bcb759861b94be', '圆锥曲线', 'teacher', '2021-09-16 20:10:12', 'x^2+y^2=1', '这是个椭圆', '这是人类历史上发现的第一个椭圆', '这不是椭圆', 'D', '显然');
-INSERT INTO `problem` VALUES ('443d076cad754f8cae8645b6e13d8de5', 'dddd', 'teacher', '2021-09-16 11:29:58', 'saf', 'sdfsdf', 'asdfg', 'sadf', 'B', 'sadf');
-INSERT INTO `problem` VALUES ('47cc40aeb4e84b489ebe1256b0b0dee2', '1', 'teacher', '2021-09-15 17:13:11', '1', '1', '1', '1', 'B', 'dsaf');
-INSERT INTO `problem` VALUES ('90d77c1f940f42a8b53c206e0b93768f', 'asD', 'teacher', '2021-09-16 10:45:20', 'A', 'AD', 'F', 'SD', 'A', 'SDF');
-INSERT INTO `problem` VALUES ('a815dd1365d546c5b6463e24c60ca832', '比较难', 'teacher', '2021-09-16 20:10:12', 'x=1', 'y=1', 'x=1且y=1', '以上均正确', 'D', '很明显');
-INSERT INTO `problem` VALUES ('ac920a02cba6421a94b28573370e95cd', 's', 'teacher', '2021-09-15 22:44:08', 'a', 'a', 'f', 'b', 'B', 'sdf');
-INSERT INTO `problem` VALUES ('c6710c266f854741912eabcd542d738d', '很难', 'teacher', '2021-09-16 20:10:12', 'A', 'B', 'C', 'D', 'A', '很难所以老师也不知道');
-INSERT INTO `problem` VALUES ('eb7edd54b6f448148e26ec70d5c61d6f', 's', 'teacher', '2021-09-15 19:26:15', 'a', 'a', 'a', 'a', 'B', 'xc');
+INSERT INTO `problem` VALUES ('3e3b58d740124000ba01b31e700c4d07', '协议三要素不包括哪项', 'teacher', '2021-09-29 21:53:06', '语法', '语义', '定时', '制定人', 'D', '协议三要素：语法、语义、定时');
+INSERT INTO `problem` VALUES ('5690c7e8f58a4a56b5979d616fb336e4', 'TCP协议具有哪些特点：', 'teacher', '2021-09-29 21:53:06', '面向连接', '流量控制', '拥塞控制', '以上都有', 'D', 'TCP：可靠传输、流量控制、拥塞控制、面向连接');
+INSERT INTO `problem` VALUES ('7ab64b0fa6404cf48cc57e65ba5d521e', '因特网协议栈有几层', 'teacher', '2021-09-29 21:53:06', '3', '4', '5', '7', 'C', '因特网协议栈是一个五层模型');
+INSERT INTO `problem` VALUES ('9a4919826d4d4358b5db96fe81511973', '123', 'teacher', '2021-09-29 21:52:55', '1', '2', '2', '3', 'A', 'A');
+INSERT INTO `problem` VALUES ('9c52769c22b14570a846e6373a4b1d19', 'TCP/IP模型几层', 'teacher', '2021-09-29 21:53:06', '3', '4', '6', '7', 'B', 'TCP/IP模型是一个四层模型');
+INSERT INTO `problem` VALUES ('e7f1f789efc94c4fad2513d1ceab3062', 'IPv4地址的长度是', 'teacher', '2021-09-29 21:53:06', '2字节', '4字节', '8字节', '16字节', 'B', 'IPv4地址的长度是4字节32比特');
+INSERT INTO `problem` VALUES ('f5a8617125f3477c964cc10f7236d6f9', '网络按拓扑结构划分包括：', 'teacher', '2021-09-29 21:53:06', '总线型', '星型', '环形', '以上都是', 'D', '按拓扑结构：总线型、星型、环形、树形、网状网');
 
 -- ----------------------------
 -- Table structure for school
@@ -315,6 +287,7 @@ CREATE TABLE `school` (
 INSERT INTO `school` VALUES ('1', '戳戳学院');
 INSERT INTO `school` VALUES ('2', '牛牛学院');
 INSERT INTO `school` VALUES ('3', '喵喵学院');
+INSERT INTO `school` VALUES ('4', '猪猪学院');
 INSERT INTO `school` VALUES ('5', '汪汪学院');
 
 -- ----------------------------
@@ -335,20 +308,13 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '1', 'dl', '1', null);
-INSERT INTO `user` VALUES ('admin', 'admin', null, null, null);
-INSERT INTO `user` VALUES ('student', 'S0', 'sss', '1', null);
-INSERT INTO `user` VALUES ('teacher', 'T0', 'ttt', '1', 'http://localhost:9090/files/avatar/75c87d67598a479ebe4575b46f8677f3oakCenter1.png');
-INSERT INTO `user` VALUES ('1438656966569836546', 'T2', 'sdf', '1', null);
-INSERT INTO `user` VALUES ('1438675537718935553', 'T5', 'XX', '1', null);
-INSERT INTO `user` VALUES ('1438675537718935553', 'T6', 'SS', '1', null);
-INSERT INTO `user` VALUES ('1438675537718935553', 'T7', 'DD', '1', null);
-INSERT INTO `user` VALUES ('1438675537718935553', 'T8', 'BB', '1', null);
-INSERT INTO `user` VALUES ('1438675537718935553', 'T9', 'QQ', '1', null);
-INSERT INTO `user` VALUES ('xxx', 'xxx', null, null, null);
-INSERT INTO `user` VALUES ('1438671105895747585', '圆锥曲线', 'x^2+y^2=1', '3', null);
-INSERT INTO `user` VALUES ('1438671105895747585', '很难', 'A', '1', null);
-INSERT INTO `user` VALUES ('1438671105895747585', '比较难', 'x=1', '2', null);
+INSERT INTO `user` VALUES ('admin', 'admin', null, null, 'http://localhost:9090/files/avatar/a7f6f8e5fd5b4dbbb862f0e9bcd71316adminAvatar.jpg');
+INSERT INTO `user` VALUES ('XUESHENG', 'S101', '喵喵', '1', 'http://localhost:9090/files/avatar/ece5c32c0483418eb70445e136b17d74studentAvatar.jpg');
+INSERT INTO `user` VALUES ('S102', 'S102', '戳戳', '1', null);
+INSERT INTO `user` VALUES ('S103', 'S103', '汪汪', '1', null);
+INSERT INTO `user` VALUES ('S201', 'S201', '香香', '2', null);
+INSERT INTO `user` VALUES ('S202', 'S202', '可可', '2', null);
+INSERT INTO `user` VALUES ('teacher', 'T0', 'ttt', '1', 'http://localhost:9090/files/avatar/63c08844c4f3474886570cb318877effteacherAvatar.jpg');
 
 -- ----------------------------
 -- Table structure for video
@@ -369,4 +335,4 @@ CREATE TABLE `video` (
 -- ----------------------------
 -- Records of video
 -- ----------------------------
-INSERT INTO `video` VALUES ('514c54b440194aeebe468067435c8d7a嘿嘿嘿.mp4', '1', 'http://localhost:9090/files/video/514c54b440194aeebe468067435c8d7a嘿嘿嘿.mp4', '2021-09-13', '测试一波', '1');
+INSERT INTO `video` VALUES ('956f76808ddd45708382fa2fe46bad5dvideoTest.mp4', '095a0d0d5d8b4eb18d6f2cfb1fe2c1e2', 'http://localhost:9090/files/video/956f76808ddd45708382fa2fe46bad5dvideoTest.mp4', '2021-09-29', 'shipin', '1');

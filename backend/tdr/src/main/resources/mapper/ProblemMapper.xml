@@ -8,11 +8,9 @@
         where teacher_id = #{id}
     </select>
     <select id="getProblemByPaperId" resultType="com.xttdr.entity.Problem">
-        select * from problem
-        where problem_id in (
-            select problem_id from paper
-            where exam_id = #{id}
-            )
+        select *
+        from paper a left join problem b on a.problem_id = b.problem_id
+        where exam_id = #{id}
     </select>
 
 </mapper>

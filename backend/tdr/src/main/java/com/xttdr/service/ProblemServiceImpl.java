@@ -6,6 +6,7 @@ import com.xttdr.common.Result;
 import com.xttdr.entity.Problem;
 import com.xttdr.mapper.ProblemMapper;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -93,13 +94,14 @@ public class ProblemServiceImpl implements ProblemService{
             for(int i = 1; i < sheet.getPhysicalNumberOfRows(); i++){
                 Row row = sheet.getRow(i);
                 problem.setProblemId(IdUtil.fastSimpleUUID());
-                problem.setDescribes(row.getCell(1).getStringCellValue());
-                problem.setOptionA(row.getCell(2).getStringCellValue());
-                problem.setOptionB(row.getCell(3).getStringCellValue());
-                problem.setOptionC(row.getCell(4).getStringCellValue());
-                problem.setOptionD(row.getCell(5).getStringCellValue());
-                problem.setAnswer(row.getCell(6).getStringCellValue());
-                problem.setParse(row.getCell(7).getStringCellValue());
+                DataFormatter formatter = new DataFormatter();
+                problem.setDescribes(formatter.formatCellValue(row.getCell(1)));
+                problem.setOptionA(formatter.formatCellValue(row.getCell(2)));
+                problem.setOptionB(formatter.formatCellValue(row.getCell(3)));
+                problem.setOptionC(formatter.formatCellValue(row.getCell(4)));
+                problem.setOptionD(formatter.formatCellValue(row.getCell(5)));
+                problem.setAnswer(formatter.formatCellValue(row.getCell(6)));
+                problem.setParse(formatter.formatCellValue(row.getCell(7)));
                 addProblem(problem);
             }
         }catch (IOException e){

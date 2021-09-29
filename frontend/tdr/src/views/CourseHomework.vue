@@ -1,15 +1,15 @@
 <template>
   <el-button type="primary" @click="handleadd" v-if="user.userType !== 'student'">添加作业</el-button>
 
-  <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
-    <el-table-column prop="name" label="作业名称" width="360"> </el-table-column>
-    <el-table-column prop="createdTime" label="起始日期" width="360"> </el-table-column>
-    <el-table-column prop="deadline" label="结束日期"> </el-table-column>
-    <el-table-column label="操作">
+  <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px; height: 60vh">
+    <el-table-column prop="name" align="center" label="作业名称" width="240" > </el-table-column>
+    <el-table-column prop="createdTime" align="center" label="起始日期" width="330" :formatter="dateFormat"> </el-table-column>
+    <el-table-column prop="deadline" align="center" label="结束日期" :formatter="deadlineFormat" width="330"> </el-table-column>
+    <el-table-column label="操作" align="center">
       <template #default="scope">
-        <el-button size="mini" type="success" @click="details(scope.row)">查看</el-button>
-        <el-button size="mini" v-if="user.userType !== 'student'" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button size="mini" v-if="user.userType !== 'student'" @click="homeworkList(scope.row.homeworkId)">批阅</el-button>
+        <el-button size="mini" type="primary" v-if="user.userType == 'student'" @click="details(scope.row)" >提交</el-button>
+        <el-button size="mini" type="success" v-if="user.userType !== 'student'" @click="handleEdit(scope.row)">编辑</el-button>
+        <el-button size="mini" type="primary" v-if="user.userType !== 'student'" @click="homeworkList(scope.row.homeworkId)">批阅</el-button>
         <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.homeworkId)" v-if="user.userType !== 'student'">
           <template #reference>
             <el-button size="mini" type="danger">删除</el-button>
@@ -60,6 +60,7 @@
         :limit="1"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
+        :on-change="handleChange"
         :http-request="httpRequest"
         :file-list="fileList"
         :auto-upload="false"
@@ -72,12 +73,20 @@
           size="small"
           type="success"
           @click="submitUpload"
-      >提交上传
+          :disabled="fileList.length == 0 ? true : false"
+      >提交上传{{fileList.length}}
       </el-button>
     </el-upload>
+
     <el-card style="margin-top: 10px">
       <div v-html="detail.content" style="min-height: 100px"></div>
     </el-card>
+
+    <template #footer>
+    <span class="dialog-footer">
+      <p class="footer" style="width: 100%;">提交之后无法更改噢</p>
+    </span>
+</template>
   </el-dialog>
 
 </template>
@@ -140,6 +149,7 @@ export default {
       fd.append('file', fileObj)// 文件对象
       fd.append('homeworkId', this.detail.homeworkId)
       fd.append('studentId',this.user.id)
+
       let config = {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -169,6 +179,9 @@ export default {
     handlePreview(file) {
       console.log(file)
     },
+    handleChange(file, fileList) {
+      this.fileList = fileList
+    },
     handleadd(){
       this.dialogVisible = true
       this.form = {}
@@ -187,6 +200,7 @@ export default {
       this.form.content = editor.txt.html()  // 获取 编辑器里面的值，然后赋予到实体当中
       if (this.form.homeworkId) {  // 更新
         request.post("/homework/update", this.form).then(res => {
+          console.log(res)
           if (res.code === '0') {
             this.$message({
               type: "success",
@@ -273,11 +287,34 @@ export default {
     handleCurrentChange(pageNum) {  // 改变当前页码触发
       this.currentPage = pageNum
       this.load()
-    }
+    },
+    dateFormat(row,column){
+      var t=new Date(row.createdTime);//row 表示一行数据, createdTime 表示要格式化的字段名称
+      var year=t.getFullYear(),
+          month=t.getMonth()+1,
+          day=t.getDate();
+      var newTime=year+'-'+
+          (month<10?'0'+month:month)+'-'+
+          (day<10?'0'+day:day)+' ';
+      return newTime;
+    },
+    deadlineFormat(row,column){
+      var t=new Date(row.deadline);
+      var year=t.getFullYear(),
+          month=t.getMonth()+1,
+          day=t.getDate();
+      var newTime=year+'-'+
+          (month<10?'0'+month:month)+'-'+
+          (day<10?'0'+day:day)+' ';
+      return newTime;
+    },
   }
 }
 </script>
 
 <style scoped>
+.footer{
+  color: #8c939d;
 
+}
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <el-button  icon="el-icon-back" @click="backToAll()" >返回试卷</el-button>
   <el-button size="mini" type="primary" style="margin-right: 10px" @click="getinpaper">加入试卷</el-button>
   <el-upload
       v-if="user.userType !== 'student'"
@@ -123,11 +124,7 @@ import request from "@/utils/request";
 
 export default {
   name: "ProblemList",
-  computed:{
-    examId() {
-      return this.$store.state.curExamId
-    }
-  },
+
   data() {
     return {
       loading: false,
@@ -151,11 +148,17 @@ export default {
       checked: []
     }
   },
+  computed:{
+    examId() {
+      return this.$store.state.curExamId
+    }
+  },
   created() {
     let userStr = sessionStorage.getItem("user")
     this.user = JSON.parse(userStr)
     this.loadProblems();
   },
+
   methods:{
     getinpaper(){
       request.post('/exam/paper/addProblems',this.ids,{params:{examId: this.examId}}).then(res => {
@@ -251,13 +254,13 @@ export default {
             message: "新增成功"
           })
           this.fileList=[]
+          this.loadProblems() // 刷新表格的数据
         } else {
           this.$message({
             type: "error",
             message: res.msg
           })
         }
-        this.load() // 刷新表格的数据
       })
     },
     submitUpload() {
@@ -271,7 +274,15 @@ export default {
     },
     problemBase(){
       this.$router.push('/ProblemList')
-    }
+    },
+    backToAll(){
+      this.$router.push({
+        name: 'editExam',
+        params: {
+          examId: this.examId
+        }
+      })
+    },
   }
 
 }

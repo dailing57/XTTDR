@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService{
                 user.setSchoolId(formatter.formatCellValue(row.getCell(1)));
                 user.setWorkId(formatter.formatCellValue(row.getCell(2)));
                 user.setName(formatter.formatCellValue(row.getCell(3)));
+                user.setId(user.getWorkId());
                 if(userMapper.insert(user) <= 0)
                     return Result.error("-1","您导入的第"+i+"行信息存在问题");
             }

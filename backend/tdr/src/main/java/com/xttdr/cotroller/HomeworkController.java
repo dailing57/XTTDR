@@ -51,6 +51,7 @@ public class HomeworkController extends BaseController{
     public Result<?> submittedHomework(@RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize,
                                        @RequestParam(defaultValue = "") String homeworkId){
+        System.out.println(pageNum+" "+pageSize+" "+homeworkId);
         return homeworkService.submittedHomework(pageNum,pageSize,homeworkId);
     }
     @PostMapping("/deleteSubmit")

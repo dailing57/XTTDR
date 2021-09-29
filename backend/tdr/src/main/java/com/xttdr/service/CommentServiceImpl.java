@@ -62,7 +62,6 @@ public class CommentServiceImpl implements CommentService{
         }
         return Result.success(commentIPage);
     }
-
     @Override
     public Integer commentCount(String id) {
         return commentMapper.commentCount(id);

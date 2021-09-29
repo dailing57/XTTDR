@@ -1,23 +1,25 @@
 <template>
-  <div style="width: 100%; height: 100vh; overflow: hidden">
-    <div style="width: 400px; margin: 100px auto">
-      <div style="font-size: 30px; text-align: center; padding: 30px 0">欢迎注册</div>
-      <el-form ref="form" :model="form" size="normal" :rules="rules">
-        <el-form-item prop="id" label="注册ID">
+  <div class="login" style="width: 100%; height: 100vh; overflow: hidden">
+    <div  class="login_card" style="width: 400px; margin: 50px auto 20px auto">
+      <div style="font-size: 30px; text-align: center; ">
+        <img :src="titleUrl" style="width:90%;height: 90%;margin-right: 10%" />
+      </div>
+      <el-form  ref="form" :model="form" size="normal" :rules="rules" style="padding: 0 5%  3%  5% ">
+        <el-form-item prop="id" label="注册ID" class="regItem">
           <el-input prefix-icon="el-icon-user-solid" v-model="form.id"></el-input>
         </el-form-item>
-        <el-form-item prop="workId" label="工号">
+        <el-form-item prop="workId" label="工号" class="regItem">
           <el-input prefix-icon="el-icon-user-solid" v-model="form.workId"></el-input>
         </el-form-item>
-        <el-form-item prop="pwd" label="密码">
+        <el-form-item prop="pwd" label="密码" class="regItem">
           <el-input prefix-icon="el-icon-lock" v-model="form.pwd" show-password></el-input>
         </el-form-item>
-        <el-form-item prop="confirm" label="确认密码">
+        <el-form-item prop="confirm" label="确认密码" class="regItem">
           <el-input prefix-icon="el-icon-lock" v-model="form.confirm" show-password></el-input>
         </el-form-item>
 
         <div style="text-align: center;margin-bottom: 20px">
-          <el-radio-group v-model="form.userType">
+          <el-radio-group v-model="form.userType" fill="#7858C0">
             <el-radio-button label="student">学生</el-radio-button>
             <el-radio-button label="teacher">教师</el-radio-button>
             <el-radio-button label="admin">管理员</el-radio-button>
@@ -26,7 +28,11 @@
         <el-form-item>
           <el-button style="width: 100%" type="primary" @click="register">注册</el-button>
         </el-form-item>
+        <el-form-item><el-button type="text" @click="$router.push('/login')">前往登录 >> </el-button></el-form-item>
       </el-form>
+    </div>
+    <div class="footer">
+      <p>Copyright© 2021.&nbsp;&nbsp;&nbsp; 学通天地人.&nbsp;&nbsp;All rights reserved.</p>
     </div>
   </div>
 </template>
@@ -38,6 +44,7 @@ export default {
   name: "Register",
   data() {
     return {
+      titleUrl: require("../assets/title.png"),
       form: {},
       rules: {
         username: [
@@ -99,5 +106,9 @@ export default {
 </script>
 
 <style scoped>
-
+@import '../assets/css/style.css';
+ >>> .el-form-item__label{
+  color: #2d2b38;
+   font-size: 20px;
+}
 </style>

@@ -152,10 +152,10 @@ export default {
           pageSize: this.pageSize,
           examId: this.examId
         }}).then(res => {
-          this.problems = res.data.records
-          this.total = res.data.total
-          this.loading = false
-        })
+        this.problems = res.data.records
+        this.total = res.data.total
+        this.loading = false
+      })
     },
     submitForm(form) {
       this.$refs['form'].validate(valid => {

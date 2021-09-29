@@ -1,9 +1,9 @@
 <template>
   <el-tag>课程编号：{{courseId}}</el-tag>
   <el-button size="mini" v-if="user.userType !== 'student'" @click="getList" style="margin-left: 10px">学生名单</el-button>
-  <el-popconfirm title="确定退选这门课吗？" @confirm="deleteStudy">
+  <el-popconfirm title="确定退选这门课吗？" @confirm="deleteStudy" v-if="user.userType === 'student'">
     <template #reference>
-      <el-button size="mini" type="danger">退选课程</el-button>
+      <el-button size="mini" type="danger" >退选课程</el-button>
     </template>
   </el-popconfirm>
   <el-popconfirm title="确定删除这门课吗？" v-if="user.userType !== 'student'" @confirm="deleteCourse">
@@ -25,7 +25,7 @@
       </el-table-column>
     </el-table>
   </el-dialog>
-  <el-menu
+    <el-menu
         :default-active="path"
         class="el-menu-demo"
         mode="horizontal"
@@ -41,9 +41,7 @@
 </template>
 
 <script>
-
 import request from "@/utils/request";
-
 export default {
   name: "CoursePage",
   data() {

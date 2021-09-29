@@ -9,6 +9,7 @@
       :limit="1"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
+      :on-change="handleChange"
       :http-request="httpRequest"
       :file-list="fileList"
       :auto-upload="false"
@@ -21,14 +22,15 @@
         size="small"
         type="success"
         @click="submitUpload"
+        :disabled="fileList.length == 0 ? true : false"
     >提交上传
     </el-button>
   </el-upload>
   <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
     <el-table-column prop="id" label="用户ID" width="360"> </el-table-column>
-    <el-table-column prop="workId" label="工号" width="360"> </el-table-column>
-    <el-table-column prop="schoolId" label="学院编号"> </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column prop="workId" align="center"  label="工号" width="360"> </el-table-column>
+    <el-table-column prop="schoolId" align="center" label="学院编号"> </el-table-column>
+    <el-table-column align="center" label="操作">
       <template #default="scope">
         <el-popconfirm title="确定删除吗？" @confirm="handleDelete(scope.row.id)">
           <template #reference>
@@ -134,6 +136,9 @@ export default {
     handleRemove(file, fileList) {
       this.fileList=fileList
     },
+    handleChange(file, fileList) {
+      this.fileList = fileList
+    },
     handlePreview(file) {
       console.log(file)
     },
@@ -155,7 +160,7 @@ export default {
       })
     },
     handleDelete(id){
-      request.post('/manage/delete/'+id).then(res => {
+      request.post('/manage/delete',null,{params: {id:id}}).then(res => {
             if(res.code === '0'){
               this.$message({
                 type: "success",

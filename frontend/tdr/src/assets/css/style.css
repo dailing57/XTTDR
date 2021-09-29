@@ -1,0 +1,110 @@
+@font-face {
+	font-family: 'ok';
+	src: url("FZFWZhuZGDSMCJW.TTF");
+	}
+*{
+    margin: 0;
+    padding: 0;
+    /*background-color: rgb(189, 205, 235);*/
+}
+li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+.login{
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    background: linear-gradient(to right bottom ,rgb(104,82,199),rgb(118,76,173),#aba6dc);
+}
+.login .footer {
+    padding: 20px 15px;
+
+    font-size: 20px;
+    color: #6a5ba8;
+    /*width: 1000px;*/
+    background-color: rgba(255, 255, 255, 0.29);
+    box-shadow:0 -5px 10px 1px  #b5adda;
+    text-align: center;
+}
+.login .input{
+    height: 35px;
+    background: #ffd04b;
+    margin: 10px auto;
+}
+.login .login_card{
+    width:30vw;
+    background-color: rgba(255, 255, 255, 0.32);
+    margin:5vh auto 5vh auto;
+    box-shadow:0 5px 20px 1px  #b5adda;
+    border-radius: 14px;
+}
+.login .validCode{
+    background-color: rgba(255, 255, 255, 0.27);
+    border-radius: 5px;
+}
+
+/*试卷的css*/
+.examEditor_page{
+    font-size: medium;
+}
+.examEditor_page .problem{
+    color: #4c4864;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12),0 0 6px rgba(0,0,0,0.04);
+    margin: 5px;
+}
+.examEditor_page .problem .describes{
+    font-size: small;
+    background-color: #595760;
+    color: #f3f3fd;
+}
+.examEditor_page .problem .options{
+    margin: 10px;
+    text-align: center;
+}
+.examEditor_page .problem .answer{
+    color: rgb(61, 59, 79);
+}
+
+.examEditor_page .newproblem{
+    color: #241e42;
+    background-color: rgba(238, 239, 243, 0.44);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12),0 0 6px rgba(0,0,0,0.04);
+}
+.examEditor_page .newproblem .describes{
+    margin: 10px;
+}
+.examEditor_page .newproblem .options{
+    margin: 10px;
+}
+.examEditor_page .newproblem .answer{
+    margin: 10px;
+}
+
+.exam{
+    font-size: medium;
+}
+.exam .problem{
+    color: #4c4864;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12),0 0 6px rgba(0,0,0,0.04);
+    margin: 5px;
+}
+.exam .problem .describes{
+    font-size: small;
+    background-color: #595760;
+    color: #f3f3fd;
+}
+.exam .problem .options{
+    margin: 10px;
+    text-align: center;
+}
+.exam .problem .answer{
+    color: rgb(61, 59, 79);
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.2);
+}

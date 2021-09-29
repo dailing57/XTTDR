@@ -11,7 +11,7 @@
             ref="form"
             label-width="100px"
         >
-          <el-button type="primary" v-if="this.curtime>0" @click="submitForm('form')">提交试卷</el-button>
+          <el-button type="primary" v-if="this.curTime>0" @click="submitForm('form')">提交试卷</el-button>
           <el-card v-for="(item,index) in problems" :key='index' style="font-size: larger;margin-top: 10px">
             <el-row>
               <div style="margin-left: 60px">
@@ -47,9 +47,9 @@ export default {
       form: {},
       problems: [],
       percentage: 100,
-      lasttime: 3600,
-      begintime: 0,
-      curtime: 0,
+      lastTime: 3600,
+      beginTime: 0,
+      curTime: 0,
       customColors: [{
         color: '#f56c6c',
         percentage: 20
@@ -91,11 +91,11 @@ export default {
     decrease() {
       let me = this;
       let interval = window.setInterval(function () {
-        me.percentage = Number((me.curtime / me.lasttime) * 100).toFixed(0);
-        --me.curtime;
-        me.h = Math.floor(me.curtime/3600)
-        me.m = Math.floor(me.curtime/60%60)
-        me.s = Math.floor(me.curtime%60)
+        me.percentage = Number((me.curTime / me.lastTime) * 100).toFixed(0);
+        --me.curTime;
+        me.h = Math.floor(me.curTime/3600)
+        me.m = Math.floor(me.curTime/60%60)
+        me.s = Math.floor(me.curTime%60)
         if (me.curtime < 0) {
           me.percentage = 0;
           me.curtime = 0;
@@ -105,11 +105,14 @@ export default {
     },
     load() {
       request.get('exam/id/' + this.examId).then(res => {
-        this.begintime = Date.parse(res.data.begintime)
-        this.lasttime = res.data.lasttime * 3600
-        this.curtime = this.lasttime - ((new Date() - this.begintime) / 1000)
-        if (this.curtime > this.lasttime) {
+        this.beginTime = Date.parse(res.data.begintime)
+        this.lastTime = res.data.lasttime * 3600
+        this.curTime = this.lastTime - ((new Date() - this.beginTime) / 1000)
+        if (this.curTime > this.lastTime) {
           alert('考试时间已超过')
+          this.$router.push({
+            name: 'exam',
+          })
         }
       })
     },

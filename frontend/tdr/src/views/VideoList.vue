@@ -1,8 +1,9 @@
 <template>
+  <el-button  icon="el-icon-back" @click="backToAll()" >返回课程视频</el-button>
   <el-button type="success" @click="upload">上传视频</el-button>
   <el-table :data="tableData"  v-loading="loading" stripe style="width: 100%;margin-top: 10px;">
     <el-table-column prop="name" label="视频名称" width="360"> </el-table-column>
-    <el-table-column prop="createdTime" label="日期" width="360"> </el-table-column>
+    <el-table-column prop="createdTime" label="日期" width="360" :formatter="dateFormat"> </el-table-column>
     <el-table-column prop="seq" label="播放顺序" width="360"> </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
@@ -26,6 +27,7 @@
         :on-remove="handleRemove"
         :http-request="httpRequest"
         :before-upload="beforeVideoUpload"
+        :on-change="handleChange"
         :file-list="fileList"
         :auto-upload="false"
     >
@@ -43,7 +45,7 @@
       </el-form>
       <span class="dialog-footer">
         <el-button @click="vis = false">取 消</el-button>
-        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="primary" @click="save" :disabled=this.dialogVisible >确 定</el-button>
       </span>
     </el-upload>
   </el-dialog>
@@ -76,7 +78,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      tableData: []
+      tableData: [],
+      dialogVisible:true
     }
   },
   computed: {
@@ -108,9 +111,14 @@ export default {
     },
     handleRemove(file, fileList) {
       this.fileList=fileList
+      this.dialogVisible = fileList.length == 0 ? true : false
     },
     handlePreview(file) {
       console.log(file)
+    },
+    handleChange(file, fileList) {
+      this.fileList = fileList
+      this.dialogVisible = fileList.length == 0 ? true : false
     },
     beforeVideoUpload(file) {
       const isMP4 = file.type === 'video/mp4'
@@ -145,6 +153,7 @@ export default {
             message: "提交成功"
           })
           this.fileList=[]
+          this.load()//0920更改，上传后刷新列表
         } else {
           this.$message({
             type: "error",
@@ -156,7 +165,7 @@ export default {
     save(){
       this.$refs.upload.submit()
       this.vis = false
-      this.load()
+
     },
     load() {
       this.loading = true
@@ -179,8 +188,27 @@ export default {
     handleCurrentChange(pageNum) {  // 改变当前页码触发
       this.currentPage = pageNum
       this.load()
-    }
-  }
+    },
+    dateFormat(row,column){
+      var t=new Date(row.createdTime);//row 表示一行数据, updateTime 表示要格式化的字段名称
+      var year=t.getFullYear(),
+          month=t.getMonth()+1,
+          day=t.getDate();
+      var newTime=year+'-'+
+          (month<10?'0'+month:month)+'-'+
+          (day<10?'0'+day:day);
+      return newTime;
+    },
+    backToAll(){
+      this.$router.push({
+        name: '/coursePage/video',
+        params: {
+          examId: this.examId
+        }
+      })
+    },
+  },
+
 }
 </script>
 

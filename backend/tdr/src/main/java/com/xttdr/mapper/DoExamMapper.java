@@ -15,6 +15,9 @@ public interface DoExamMapper extends BaseMapper<DoExam> {
     IPage<DoExam> getDoExamByUserId(Page<?> page, @Param("id") String examId);
     IPage<DoExam> getExamByUser(Page<?> page, @Param("id") String id);
     List<String>  getAnswer(String examId);
-    Double getAverageScore(@Param("id") String id);
+    Double getAvgScore(@Param("id") String id);
+    Double getMaxScore(@Param("id") String id);
+    Double getMinScore(@Param("id") String id);
+    Double getAttendance(@Param("id") String id);
 }
 

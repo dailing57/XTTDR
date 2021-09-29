@@ -25,6 +25,7 @@
           <el-menu-item-group v-for="(item,index) in this.videoList">
             <el-menu-item :index="index.toString()" @click="changeSource(item.path)">{{item.name}}</el-menu-item>
           </el-menu-item-group>
+
         </el-sub-menu>
       </el-menu>
     </el-col>
@@ -44,6 +45,8 @@ export default {
     let userStr = sessionStorage.getItem("user")
     this.user = JSON.parse(userStr)
     this.getVideos()
+
+    //this.source = this.videoList[0].path
   },
   data () {
     return {

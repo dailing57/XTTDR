@@ -3,6 +3,7 @@ package com.xttdr.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xttdr.common.Result;
+import com.xttdr.entity.Account;
 import com.xttdr.entity.Course;
 import com.xttdr.entity.DoCourse;
 import com.xttdr.mapper.CourseMapper;
@@ -33,10 +34,12 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Result<?> getStudentList(String courseId) {
+    public Result<?> getStudentList(String courseId, Account account) {
         QueryWrapper<DoCourse> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("course_id",courseId);
-        return Result.success(doCourseMapper.selectList(queryWrapper));
+        List<DoCourse> list = doCourseMapper.selectList(queryWrapper);
+        list.removeIf(doCourse -> doCourse.getStudentId().equals(account.getId()));
+        return Result.success(list);
     }
 
     @Override
@@ -95,7 +98,6 @@ public class CourseServiceImpl implements CourseService{
         }
         return Result.error("-1","课程库中没有该课程");
     }
-
     @Override
     public Integer courseCount(String id) {
         return doCourseMapper.courseCount(id);

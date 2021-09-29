@@ -12,10 +12,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         registry.addInterceptor(authInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login", "/register", "/files/**");
     }
+    /*在这里添加访问静态资源的路径*/
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/files/**").addResourceLocations("file:"+System.getProperty("user.dir")+"/files/");
@@ -24,4 +26,6 @@ public class WebConfig implements WebMvcConfigurer {
     public AuthInterceptor authInterceptor() {
         return new AuthInterceptor();
     }
+
+
 }
