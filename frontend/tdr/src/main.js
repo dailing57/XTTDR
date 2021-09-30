@@ -17,7 +17,7 @@ const app = createApp(App)
     .use(store)
     .use(router)
     .use(ElementPlus, {size: 'small' })
-	  .use(Vue3VideoPlayer, {lang: 'zh-CN'})
+    .use(Vue3VideoPlayer, {lang: 'zh-CN'})
     .mount('#app')
 app.echarts = echarts
 
